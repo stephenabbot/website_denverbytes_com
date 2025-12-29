@@ -1,0 +1,341 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactCTA from "../components/ContactCTA.astro";
+import Hero from "../components/Hero.astro";
+import Icon from "../components/Icon.astro";
+import Pill from "../components/Pill.astro";
+
+// Technology categories with proficiency levels and optional URLs
+const technologies = {
+	"Cloud Platforms": {
+		icon: "rocket-launch",
+		items: [
+			{ name: "AWS", level: "Expert", years: "5+", url: "https://aws.amazon.com/" },
+			{ name: "IAM & Identity Center", level: "Advanced", years: "5+", url: "https://aws.amazon.com/iam/" },
+			{ name: "Cost Explorer", level: "Intermediate", years: "3+", url: "https://aws.amazon.com/aws-cost-management/aws-cost-explorer/" },
+		]
+	},
+	"AWS Services": {
+		icon: "code",
+		items: [
+			{ name: "EC2", level: "Advanced", years: "5+", url: "https://aws.amazon.com/ec2/" },
+			{ name: "Lambda", level: "Expert", years: "4+", url: "https://aws.amazon.com/lambda/" },
+			{ name: "S3", level: "Advanced", years: "5+", url: "https://aws.amazon.com/s3/" },
+			{ name: "CloudWatch", level: "Expert", years: "5+", url: "https://aws.amazon.com/cloudwatch/" },
+			{ name: "RDS", level: "Intermediate", years: "4+", url: "https://aws.amazon.com/rds/" },
+			{ name: "EKS", level: "Intermediate", years: "3+", url: "https://aws.amazon.com/eks/" },
+			{ name: "ECS", level: "Intermediate", years: "3+", url: "https://aws.amazon.com/ecs/" },
+			{ name: "API Gateway", level: "Intermediate", years: "3+", url: "https://aws.amazon.com/api-gateway/" },
+			{ name: "SNS/SQS", level: "Advanced", years: "4+", url: "https://aws.amazon.com/sns/" },
+			{ name: "EventBridge", level: "Expert", years: "2+", url: "https://aws.amazon.com/eventbridge/" },
+			{ name: "Firehose", level: "Intermediate", years: "3+", url: "https://aws.amazon.com/kinesis/data-firehose/" },
+			{ name: "VPC", level: "Advanced", years: "4+", url: "https://aws.amazon.com/vpc/" },
+			{ name: "Transit Gateway", level: "Advanced", years: "2+", url: "https://aws.amazon.com/transit-gateway/" },
+			{ name: "Secrets Manager", level: "Advanced", years: "3+", url: "https://aws.amazon.com/secrets-manager/" },
+			{ name: "SSM Parameter Store", level: "Advanced", years: "3+", url: "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html" },
+		]
+	},
+	"Infrastructure & Automation": {
+		icon: "terminal-window",
+		items: [
+			{ name: "Terraform", level: "Advanced", years: "4+", url: "https://www.terraform.io/" },
+			{ name: "CloudFormation", level: "Advanced", years: "3+", url: "https://aws.amazon.com/cloudformation/" },
+			{ name: "GitHub Actions", level: "Intermediate", years: "3+", url: "https://github.com/features/actions" },
+			{ name: "Bash", level: "Intermediate", years: "10+" },
+			{ name: "Git", level: "Advanced", years: "10+", url: "https://git-scm.com/" },
+		]
+	},
+	"Programming Languages": {
+		icon: "code",
+		items: [
+			{ name: "Python", level: "Advanced", years: "5+", url: "https://www.python.org/" },
+			{ name: "Boto3/AWS SDK", level: "Advanced", years: "4+", url: "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html" },
+			{ name: "SQL", level: "Expert", years: "10+" },
+			{ name: "Java", level: "Advanced", years: "8+", url: "https://www.oracle.com/java/" },
+			{ name: "Node.js", level: "Intermediate", years: "3+", url: "https://nodejs.org/" },
+			{ name: ".NET/C#", level: "Advanced", years: "5+", url: "https://dotnet.microsoft.com/" },
+		]
+	},
+	"Databases": {
+		icon: "strategy",
+		items: [
+			{ name: "PostgreSQL", level: "Advanced", years: "5+", url: "https://www.postgresql.org/" },
+			{ name: "MySQL", level: "Intermediate", years: "8+", url: "https://www.mysql.com/" },
+			{ name: "DynamoDB", level: "Beginner", years: "3+", url: "https://aws.amazon.com/dynamodb/" },
+			{ name: "SQL Server", level: "Intermediate", years: "5+", url: "https://www.microsoft.com/en-us/sql-server/" },
+		]
+	},
+	"Observability & Monitoring": {
+		icon: "eye",
+		items: [
+			{ name: "Splunk", level: "Expert", years: "6+", url: "https://www.splunk.com/" },
+			{ name: "CloudWatch", level: "Expert", years: "5+", url: "https://aws.amazon.com/cloudwatch/" },
+			{ name: "New Relic", level: "Advanced", years: "4+", url: "https://newrelic.com/" },
+			{ name: "Dynatrace", level: "Beginner", years: "2+", url: "https://www.dynatrace.com/" },
+			{ name: "RUM", level: "Advanced", years: "3+", url: "https://aws-observability.github.io/observability-best-practices/tools/rum/" },
+			{ name: "Custom Alerting", level: "Expert", years: "5+" },
+		]
+	},
+	"Containers & Orchestration": {
+		icon: "microchip",
+		items: [
+			{ name: "Docker", level: "Intermediate", years: "4+", url: "https://www.docker.com/" },
+			{ name: "Podman", level: "Intermediate", years: "2+", url: "https://podman.io/" },
+			{ name: "Kubernetes", level: "Beginner", years: "3+", url: "https://kubernetes.io/" },
+			{ name: "EKS", level: "Intermediate", years: "3+", url: "https://aws.amazon.com/eks/" },
+			{ name: "Minikube", level: "Beginner", years: "2+", url: "https://minikube.sigs.k8s.io/" },
+		]
+	}
+};
+
+const proficiencyColors = {
+	"Expert": "var(--accent-regular)",
+	"Advanced": "var(--accent-light)",
+	"Intermediate": "var(--gray-400)"
+};
+---
+
+<BaseLayout
+	title="Technologies | Stephen Abbot"
+	description="Comprehensive overview of technologies, tools, and platforms Stephen Abbot works with"
+>
+	<div class="stack gap-20">
+		<main class="wrapper stack gap-8">
+			<Hero
+				title="Technologies"
+				tagline="Comprehensive overview of the technologies, tools, and platforms I work with daily in site reliability engineering and cloud architecture."
+				align="start"
+			/>
+
+			<!-- Competency Framework -->
+			<section class="competency-framework">
+				<h2>How I Assess Technical Competency</h2>
+				<div class="framework-grid">
+					<div class="framework-item">
+						<h3>Expert</h3>
+						<p>2+ years hands-on experience with architectural decision-making responsibility. Can design systems, understand failure modes, and mentor others.</p>
+					</div>
+					<div class="framework-item">
+						<h3>Advanced</h3>
+						<p>1+ years hands-on with solid fundamentals. Can implement solutions independently and troubleshoot complex issues.</p>
+					</div>
+					<div class="framework-item">
+						<h3>Intermediate</h3>
+						<p>6+ months hands-on OR strong theoretical knowledge with practical application. Can follow established patterns and perform routine tasks.</p>
+					</div>
+					<div class="framework-item">
+						<h3>Beginner</h3>
+						<p>Learning phase with basic understanding. Can follow documentation and tutorials with guidance.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="tech-overview">
+				<div class="tech-categories">
+					{Object.entries(technologies).map(([category, data]) => (
+						<div class="tech-category">
+							<div class="category-header">
+								<Icon icon={data.icon} color="var(--accent-regular)" size="1.5rem" />
+								<h2>{category}</h2>
+							</div>
+							<div class="tech-grid">
+								{data.items.map((tech) => (
+									<div class="tech-item">
+										{tech.url ? (
+											<a href={tech.url} target="_blank" rel="noopener noreferrer" class="tech-name-link">
+												{tech.name}
+											</a>
+										) : (
+											<div class="tech-name">{tech.name}</div>
+										)}
+										<div class="tech-meta">
+											<Pill style={`background: ${proficiencyColors[tech.level]}; color: var(--gray-999);`}>
+												{tech.level}
+											</Pill>
+											<span class="tech-years">{tech.years}</span>
+										</div>
+									</div>
+								))}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- Key Technology Pills for Homepage Reference -->
+			<section class="featured-tech">
+				<h2>Core Technologies</h2>
+				<p>Primary technologies I'm known for and work with daily:</p>
+				<div class="pill-grid">
+					<Pill><Icon icon="code" size="1em" /> AWS</Pill>
+					<Pill><Icon icon="terminal-window" size="1em" /> Terraform</Pill>
+					<Pill><Icon icon="code" size="1em" /> Python</Pill>
+					<Pill><Icon icon="eye" size="1em" /> Splunk</Pill>
+					<Pill><Icon icon="terminal-window" size="1em" /> CloudWatch</Pill>
+					<Pill><Icon icon="microchip" size="1em" /> Kubernetes</Pill>
+					<Pill><Icon icon="strategy" size="1em" /> PostgreSQL</Pill>
+					<Pill><Icon icon="rocket-launch" size="1em" /> Lambda</Pill>
+				</div>
+			</section>
+		</main>
+
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
+<style>
+	/* Competency Framework */
+	.competency-framework {
+		background: var(--gray-999_40);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		padding: 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.competency-framework h2 {
+		font-size: var(--text-2xl);
+		color: var(--gray-0);
+		margin: 0 0 1.5rem 0;
+		text-align: center;
+	}
+
+	.framework-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: 1fr;
+	}
+
+	.framework-item {
+		background: var(--gray-999_20);
+		border: 1px solid var(--gray-700);
+		border-radius: 0.5rem;
+		padding: 1rem;
+	}
+
+	.framework-item h3 {
+		color: var(--accent-regular);
+		font-size: var(--text-lg);
+		margin: 0 0 0.5rem 0;
+	}
+
+	.framework-item p {
+		color: var(--gray-300);
+		margin: 0;
+		line-height: 1.5;
+		font-size: var(--text-sm);
+	}
+
+	/* Tech Categories */
+	.tech-categories {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+
+	.tech-category {
+		background: var(--gray-999_40);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		padding: 2rem;
+	}
+
+	.category-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.category-header h2 {
+		font-size: var(--text-xl);
+		color: var(--gray-0);
+		margin: 0;
+	}
+
+	.tech-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	}
+
+	.tech-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.75rem 1rem;
+		background: var(--gray-999_20);
+		border: 1px solid var(--gray-700);
+		border-radius: 0.5rem;
+	}
+
+	.tech-name {
+		font-weight: 500;
+		color: var(--gray-100);
+	}
+
+	.tech-name-link {
+		font-weight: 500;
+		color: var(--gray-100);
+		text-decoration: none;
+		transition: color var(--theme-transition);
+	}
+
+	.tech-name-link:hover {
+		color: var(--accent-regular);
+		text-decoration: underline;
+	}
+
+	.tech-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.tech-years {
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+	}
+
+	.featured-tech {
+		text-align: center;
+		padding: 2rem;
+		background: var(--gray-999_40);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+	}
+
+	.featured-tech h2 {
+		font-size: var(--text-2xl);
+		color: var(--gray-0);
+		margin: 0 0 0.5rem 0;
+	}
+
+	.featured-tech p {
+		color: var(--gray-300);
+		margin: 0 0 1.5rem 0;
+	}
+
+	.pill-grid {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5rem;
+	}
+
+	@media (min-width: 50em) {
+		.tech-grid {
+			grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+		}
+
+		.framework-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 70em) {
+		.framework-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+</style>

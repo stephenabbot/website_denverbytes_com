@@ -1,0 +1,138 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactCTA from "../components/ContactCTA.astro";
+import Hero from "../components/Hero.astro";
+import Grid from "../components/Grid.astro";
+
+// Get all blog posts, sorted by publish date (newest first)
+const posts = (await getCollection("blog"))
+	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<BaseLayout
+	title="Blog | Stephen Abbot"
+	description="Technical insights on AWS, SRE practices, and cloud architecture from Stephen Abbot"
+>
+	<div class="stack gap-20">
+		<main class="wrapper stack gap-8">
+			<Hero
+				title="Blog"
+				tagline="Technical insights on AWS infrastructure, SRE practices, and team enablement strategies."
+				align="start"
+			/>
+
+			{posts.length > 0 ? (
+				<section class="section">
+					<Grid variant="small">
+						{posts.map((post) => (
+							<article class="blog-card">
+								<div class="blog-content">
+									<h3>
+										<a href={`/blog/${post.id}/`}>
+											{post.data.title}
+										</a>
+									</h3>
+									<p class="blog-description">
+										{post.data.description}
+									</p>
+									<div class="blog-meta">
+										<time datetime={post.data.publishDate.toISOString()}>
+											{post.data.publishDate.toLocaleDateString('en-US', {
+												year: 'numeric',
+												month: 'long',
+												day: 'numeric'
+											})}
+										</time>
+										<div class="tags">
+											{post.data.tags.map((tag) => (
+												<span class="tag">{tag}</span>
+											))}
+										</div>
+									</div>
+								</div>
+							</article>
+						))}
+					</Grid>
+				</section>
+			) : (
+				<section class="empty-state">
+					<p>Blog posts coming soon! I'll be sharing insights on AWS infrastructure, SRE best practices, and team enablement strategies.</p>
+				</section>
+			)}
+		</main>
+
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
+<style>
+	.blog-card {
+		border: 1px solid var(--gray-800);
+		border-radius: 0.75rem;
+		padding: 1.5rem;
+		background-color: var(--gray-999_40);
+		box-shadow: var(--shadow-sm);
+		transition: box-shadow var(--theme-transition);
+	}
+
+	.blog-card:hover {
+		box-shadow: var(--shadow-md);
+	}
+
+	.blog-content h3 {
+		margin: 0 0 0.5rem 0;
+		font-size: var(--text-xl);
+	}
+
+	.blog-content h3 a {
+		color: var(--gray-0);
+		text-decoration: none;
+	}
+
+	.blog-content h3 a:hover {
+		color: var(--accent-regular);
+	}
+
+	.blog-description {
+		color: var(--gray-300);
+		margin: 0 0 1rem 0;
+		line-height: 1.5;
+	}
+
+	.blog-meta {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+	}
+
+	.tag {
+		background: var(--accent-regular);
+		color: var(--accent-text-over);
+		padding: 0.125rem 0.5rem;
+		border-radius: 0.25rem;
+		font-size: var(--text-xs);
+	}
+
+	.empty-state {
+		text-align: center;
+		padding: 3rem 1rem;
+		color: var(--gray-300);
+	}
+
+	@media (min-width: 50em) {
+		.blog-meta {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+		}
+	}
+</style>

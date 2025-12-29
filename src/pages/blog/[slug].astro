@@ -1,0 +1,163 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ContactCTA from "../../components/ContactCTA.astro";
+import Pill from "../../components/Pill.astro";
+
+export async function getStaticPaths() {
+	const posts = await getCollection("blog");
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { entry: post },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+	title={`${entry.data.title} | Stephen Abbot`}
+	description={entry.data.description}
+>
+	<div class="stack gap-20">
+		<div class="stack gap-15">
+			<header class="wrapper">
+				<a class="back-link" href="/blog/">← All Posts</a>
+				<div class="stack gap-2">
+					<h1 class="title">{entry.data.title}</h1>
+					<div class="details">
+						<div class="date">
+							<time datetime={entry.data.publishDate.toISOString()}>
+								{entry.data.publishDate.toLocaleDateString('en-US', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric'
+								})}
+							</time>
+						</div>
+						<div class="tags">
+							{entry.data.tags.map((tag) => (
+								<Pill>{tag}</Pill>
+							))}
+						</div>
+					</div>
+				</div>
+			</header>
+		</div>
+
+		<main class="wrapper">
+			<div class="content">
+				<Content />
+			</div>
+		</main>
+
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
+<style>
+	.back-link {
+		color: var(--accent-regular);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		margin-bottom: 1rem;
+		display: inline-block;
+	}
+
+	.back-link:hover {
+		text-decoration: underline;
+	}
+
+	.title {
+		font-size: var(--text-4xl);
+		color: var(--gray-0);
+		margin: 0;
+	}
+
+	.details {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	.date {
+		color: var(--gray-400);
+		font-size: var(--text-sm);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.content {
+		max-width: 65ch;
+		margin: 0 auto;
+		color: var(--gray-300);
+		line-height: 1.7;
+	}
+
+	.content :global(h2) {
+		color: var(--gray-0);
+		font-size: var(--text-2xl);
+		margin: 2rem 0 1rem 0;
+	}
+
+	.content :global(h3) {
+		color: var(--gray-100);
+		font-size: var(--text-xl);
+		margin: 1.5rem 0 0.75rem 0;
+	}
+
+	.content :global(p) {
+		margin: 1rem 0;
+	}
+
+	.content :global(ul), .content :global(ol) {
+		margin: 1rem 0;
+		padding-left: 2rem;
+	}
+
+	.content :global(li) {
+		margin: 0.5rem 0;
+	}
+
+	.content :global(code) {
+		background: var(--gray-800);
+		padding: 0.125rem 0.25rem;
+		border-radius: 0.25rem;
+		font-size: 0.9em;
+	}
+
+	.content :global(pre) {
+		background: var(--gray-900);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		overflow-x: auto;
+		margin: 1.5rem 0;
+	}
+
+	.content :global(blockquote) {
+		border-left: 3px solid var(--accent-regular);
+		padding-left: 1rem;
+		margin: 1.5rem 0;
+		font-style: italic;
+		color: var(--gray-400);
+	}
+
+	@media (min-width: 50em) {
+		.details {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.title {
+			font-size: var(--text-5xl);
+		}
+	}
+</style>

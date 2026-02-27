@@ -1,8 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-// Component Imports
 import CallToAction from "../components/CallToAction.astro";
-// Page section components
 import ContactCTA from "../components/ContactCTA.astro";
 import Grid from "../components/Grid.astro";
 import Hero from "../components/Hero.astro";
@@ -11,59 +9,164 @@ import Pill from "../components/Pill.astro";
 import PortfolioPreview from "../components/PortfolioPreview.astro";
 import Skills from "../components/Skills.astro";
 import TechStack from "../components/TechStack.astro";
-// Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import portraitImage from "../assets/portrait.jpg";
 
-// Content Fetching: List four most recent work projects
-const projects = (await getCollection("work"))
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-	.slice(0, 4);
-
-// Full Astro Component Syntax:
-// https://docs.astro.build/basics/astro-components/
+const allProjects = await getCollection("work");
+const featuredIds = [
+	"foundation-terraform-bootstrap",
+	"website-infrastructure",
+	"service-email-handler",
+	"service-observability-cloudtrail",
+];
+const projects = featuredIds
+	.map((id) => allProjects.find((p) => p.id === id))
+	.filter(Boolean);
 ---
 
-<BaseLayout>
+<BaseLayout
+	title="Stephen Abbot: Infrastructure Platform Engineer | AWS at Enterprise Scale"
+	description="20+ years building AWS infrastructure at enterprise scale. SRE specializing in governance, cost optimization, and technical debt analysis across 800+ account organizations."
+>
 	<div class="stack gap-20 lg:gap-48">
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
 				<Hero
-					title="Hello, my name is Stephen Abbot"
-					tagline="I am a Senior Site Reliability Engineer and Cloud Architect specializing in AWS infrastructure, automation, and observability, based in Denver, Colorado."
+					title="Hello, I'm Stephen Abbot"
+					tagline="Infrastructure platform engineer. I find what's broken in large AWS estates, make it visible, and design systems that are cost‑efficient and operationally transparent."
 					align="start"
 				>
 					<div class="roles">
-						<Pill><Icon icon="terminal-window" size="1.33em" /> SRE</Pill
+						<Pill
+							><Icon icon="terminal-window" size="1.33em" /> SRE</Pill
 						>
 						<Pill
 							><Icon icon="rocket-launch" size="1.33em" /> Cloud Architect</Pill
 						>
-						<Pill
-							><Icon icon="heart" size="1.33em" /> Mentor</Pill
-						>
+						<Pill><Icon icon="heart" size="1.33em" /> Mentor</Pill>
 					</div>
+					<a
+						href="mailto:stephen.abbot@denverbytes.com"
+						class="hero-email"
+					>
+						stephen.abbot@denverbytes.com
+					</a>
 				</Hero>
 
-				<img
+				<Image
+					src={portraitImage}
 					alt="Stephen Abbot smiling in a red plaid shirt and tortoise shell glasses"
-					width="480"
-					height="620"
-					src="/assets/portrait.jpg"
+					width={480}
+					height={620}
+					format="webp"
+					quality={80}
+					loading="eager"
 				/>
 			</header>
 
+			<p class="hero-context">
+				20+ years building distributed, data-centric, and observability
+				solutions
+			</p>
+
+			<div class="credibility-bar">
+				<div class="cred-item">
+					<span class="cred-number">5+</span>
+					<span class="cred-label">Years in Infrastructure</span>
+				</div>
+				<div class="cred-item">
+					<span class="cred-number">800+</span>
+					<span class="cred-label">AWS Accounts in a Single Org</span>
+				</div>
+				<div class="cred-item">
+					<span class="cred-number">10+</span>
+					<span class="cred-label">Engineering Teams Enabled</span>
+				</div>
+				<div class="cred-item">
+					<span class="cred-number">40+</span>
+					<span class="cred-label">Accounts Analyzed in Depth</span>
+				</div>
+			</div>
+
 			<Skills />
-			<TechStack />
+		</div>
+
+		<!-- Flagship Project -->
+		<div class="wrapper">
+			<section class="section with-background">
+				<header class="section-header stack gap-2 lg:gap-4">
+					<h3>Flagship Project</h3>
+					<p>
+						Largest-scope project: programmatic AWS account analysis
+						and governance.
+					</p>
+				</header>
+				<div class="flagship-card">
+					<div class="flagship-label">
+						Enterprise AWS — Technical Debt Tool
+					</div>
+					<h4 class="flagship-title">
+						Programmatic Account Analysis at Scale
+					</h4>
+					<p class="flagship-subtitle">
+						Programmatic account analysis for 40+ AWS accounts in a
+						Fortune 23 healthcare organization.
+					</p>
+					<div class="flagship-scope">
+						<span>800+ account org</span>
+						<span>40+ accounts analyzed in depth</span>
+						<span>10+ teams informed</span>
+					</div>
+					<div class="flagship-section">
+						<strong class="flagship-section-label">Problem</strong>
+						<p class="flagship-body">
+							Most teams had no reliable way to tell if their AWS
+							infrastructure was cost-efficient, secure, or
+							compliant. There was no central view across
+							accounts, and no easy way to spot waste, drift, or
+							risky configurations.
+						</p>
+					</div>
+					<div class="flagship-section">
+						<strong class="flagship-section-label"
+							>What I built</strong
+						>
+						<p class="flagship-body">
+							I designed and built a Python/PostgreSQL/BI platform
+							that continuously analyzes AWS account
+							configurations — surfacing phantom resources,
+							orphaned infrastructure, security misconfigurations,
+							IAM over-provisioning, and cost optimization
+							opportunities.
+						</p>
+					</div>
+					<div class="flagship-section">
+						<strong class="flagship-section-label">Status</strong>
+						<p class="flagship-body flagship-status">
+							I am currently rebuilding the platform with an
+							improved architecture informed by lessons from the
+							first version.
+						</p>
+					</div>
+					<a
+						href="/work/tdt-technical-debt-tool/"
+						class="flagship-link"
+					>
+						Read the full case study →
+					</a>
+				</div>
+			</section>
 		</div>
 
 		<main class="wrapper stack gap-20 lg:gap-48">
 			<section class="section with-background with-cta">
 				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Selected Work</h3>
+					<h3>Supporting Projects</h3>
 					<p>
-						Explore the foundational infrastructure projects that demonstrate 
-						enterprise-grade AWS solutions - from bootstrap foundations to 
-						scalable hosting and comprehensive observability.
+						Selected projects from my platform catalog that solve
+						specific problems and support the flagship analysis
+						tool.
 					</p>
 				</header>
 
@@ -81,12 +184,95 @@ const projects = (await getCollection("work"))
 
 				<div class="cta">
 					<CallToAction href="/work/">
-						View All
+						View All Projects
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
 				</div>
 			</section>
 		</main>
+
+		<div class="wrapper">
+			<TechStack />
+		</div>
+
+		<!-- Blog Showcase -->
+		<div class="wrapper">
+			<section class="section with-background bg-variant">
+				<header class="section-header stack gap-2 lg:gap-4">
+					<h3>Recent Thinking</h3>
+					<p>
+						Here's how these problems look in practice. Observations
+						from working inside 800+ account infrastructure — not
+						repackaged documentation.
+					</p>
+				</header>
+				<div class="blog-showcase">
+					<a
+						href="/blog/got-drift-infrastructure-reality-check/"
+						class="blog-card"
+					>
+						<div class="blog-card-quote">
+							"IaC deployment is just the beginning. The real
+							challenge is maintaining that single source of truth
+							when reality inevitably drifts."
+						</div>
+						<div class="blog-card-title">
+							Got Drift? The Infrastructure Reality Check Nobody
+							Talks About
+						</div>
+					</a>
+					<a
+						href="/blog/beyond-dashboard-metrics-systems-thinking/"
+						class="blog-card"
+					>
+						<div class="blog-card-quote">
+							"Metrics are invaluable, but they're not the system
+							itself. Optimizing for the metric is not the same as
+							improving the system."
+						</div>
+						<div class="blog-card-title">
+							Beyond the Dashboard: Why Metrics Aren't the Whole
+							Story
+						</div>
+					</a>
+					<a href="/blog/show-dont-tell/" class="blog-card">
+						<div class="blog-card-quote">
+							"In a field full of unverifiable claims, deployed
+							code is the only honest credential."
+						</div>
+						<div class="blog-card-title">
+							Deployed Code Trumps Claims
+						</div>
+					</a>
+				</div>
+				<div
+					class="cta"
+					style="justify-self: center; margin-top: 1rem;"
+				>
+					<CallToAction href="/blog/">
+						View All Articles
+						<Icon icon="arrow-right" size="1.2em" />
+					</CallToAction>
+				</div>
+			</section>
+		</div>
+
+		<!-- Next Steps -->
+		<div class="wrapper">
+			<nav class="next-steps">
+				<span class="next-steps-label">Next steps</span>
+				<div class="next-steps-links">
+					<a href="/work/" class="next-step">1. Review projects</a>
+					<a href="/experience/" class="next-step"
+						>2. Review experience</a
+					>
+					<a
+						href="mailto:stephen.abbot@denverbytes.com"
+						class="next-step">3. Get in touch</a
+					>
+				</div>
+			</nav>
+		</div>
 
 		<ContactCTA />
 	</div>
@@ -101,7 +287,10 @@ const projects = (await getCollection("work"))
 	}
 
 	.roles {
-		display: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.5rem;
 	}
 
 	.hero img {
@@ -131,6 +320,56 @@ const projects = (await getCollection("work"))
 			border-radius: 4.5rem;
 			object-fit: cover;
 		}
+	}
+
+	.hero-context {
+		text-align: center;
+		color: var(--gray-400);
+		font-size: var(--text-md);
+		font-style: italic;
+	}
+
+	/* Credibility bar */
+	.credibility-bar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.5rem;
+		padding: 1.5rem 2rem;
+		background: radial-gradient(var(--gray-900), var(--gray-800) 150%);
+		border-radius: 1rem;
+		box-shadow: var(--shadow-md);
+		position: relative;
+	}
+
+	.credibility-bar::before {
+		position: absolute;
+		inset: -1px;
+		content: "";
+		background: var(--gradient-stroke);
+		border-radius: 1rem;
+		z-index: -1;
+	}
+
+	.cred-item {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		flex: 1;
+		min-width: 8rem;
+		text-align: center;
+	}
+
+	.cred-number {
+		font-size: var(--text-3xl);
+		font-weight: 700;
+		color: var(--accent-regular);
+		line-height: 1;
+	}
+
+	.cred-label {
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+		margin-top: 0.25rem;
 	}
 
 	/* ====================================================== */
@@ -212,6 +451,147 @@ const projects = (await getCollection("work"))
 		.cta {
 			grid-area: cta;
 		}
+
+		.flagship-card {
+			grid-column: 1 / -1;
+		}
+
+		.blog-showcase {
+			grid-column: 1 / -1;
+		}
+	}
+
+	/* ====================================================== */
+
+	/* Flagship card */
+	.flagship-card {
+		border: 1px solid var(--gray-800);
+		border-radius: 1.5rem;
+		padding: 2rem;
+		background: var(--gradient-subtle);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.flagship-label {
+		font-size: var(--text-sm);
+		color: var(--accent-regular);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		margin-bottom: 0.5rem;
+	}
+
+	.flagship-title {
+		font-size: var(--text-2xl);
+		color: var(--gray-0);
+		margin-bottom: 0.5rem;
+	}
+
+	.flagship-subtitle {
+		color: var(--gray-300);
+		font-size: var(--text-md);
+		margin-bottom: 1rem;
+	}
+
+	.flagship-scope {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.5rem;
+		margin-bottom: 1.25rem;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		color: var(--accent-regular);
+	}
+
+	.flagship-section {
+		margin-bottom: 0.75rem;
+	}
+
+	.flagship-section-label {
+		display: block;
+		font-size: var(--text-sm);
+		color: var(--gray-200);
+		margin-bottom: 0.25rem;
+	}
+
+	.flagship-status {
+		font-style: italic;
+		color: var(--gray-400);
+	}
+
+	.flagship-body {
+		color: var(--gray-300);
+		line-height: 1.6;
+		margin-bottom: 0.75rem;
+		max-width: 65ch;
+	}
+
+	.flagship-link {
+		display: inline-block;
+		margin-top: 0.5rem;
+		color: var(--accent-regular);
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.flagship-link:hover {
+		text-decoration: underline;
+	}
+
+	@media (min-width: 50em) {
+		.flagship-card {
+			padding: 3rem;
+		}
+
+		.flagship-title {
+			font-size: var(--text-3xl);
+		}
+	}
+
+	/* ====================================================== */
+
+	/* Blog showcase */
+	.blog-showcase {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: 1fr;
+	}
+
+	.blog-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		text-decoration: none;
+		background: var(--gradient-subtle);
+		transition:
+			border-color var(--theme-transition),
+			box-shadow var(--theme-transition);
+	}
+
+	.blog-card:hover {
+		border-color: var(--accent-dark);
+		box-shadow: var(--shadow-md);
+	}
+
+	.blog-card-quote {
+		font-size: var(--text-md);
+		color: var(--gray-200);
+		font-style: italic;
+		line-height: 1.5;
+	}
+
+	.blog-card-title {
+		font-size: var(--text-sm);
+		color: var(--accent-regular);
+		font-weight: 500;
+	}
+
+	@media (min-width: 50em) {
+		.blog-showcase {
+			grid-template-columns: repeat(3, 1fr);
+		}
 	}
 
 	/* ====================================================== */
@@ -234,5 +614,60 @@ const projects = (await getCollection("work"))
 			border-radius: 1.5rem;
 			height: 9.5rem;
 		}
+	}
+
+	/* Next steps strip */
+	.next-steps {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.5rem 2rem;
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		background: var(--gradient-subtle);
+	}
+
+	.next-steps-label {
+		font-size: var(--text-sm);
+		color: var(--gray-500);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		font-weight: 500;
+	}
+
+	.next-steps-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem 2rem;
+		justify-content: center;
+	}
+
+	.next-step {
+		color: var(--accent-regular);
+		text-decoration: none;
+		font-weight: 500;
+		font-size: var(--text-md);
+		transition: color var(--theme-transition);
+	}
+
+	.next-step:hover {
+		color: var(--accent-dark);
+	}
+
+	/* Hero email link */
+	.hero-email {
+		display: inline-block;
+		margin-top: 0.75rem;
+		color: var(--gray-400);
+		font-size: var(--text-sm);
+		text-decoration: none;
+		transition: color var(--theme-transition);
+		word-break: break-all;
+	}
+
+	.hero-email:hover,
+	.hero-email:focus {
+		color: var(--accent-regular);
 	}
 </style>

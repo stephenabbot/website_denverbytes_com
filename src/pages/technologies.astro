@@ -89,27 +89,27 @@ const technologies = {
 };
 
 const proficiencyColors = {
-	"Expert": "var(--accent-regular)",
+	"Expert": "#c084fc",
 	"Advanced": "var(--accent-light)",
 	"Intermediate": "var(--gray-400)"
 };
 ---
 
 <BaseLayout
-	title="Technologies | Stephen Abbot"
-	description="Comprehensive overview of technologies, tools, and platforms Stephen Abbot works with"
+	title="AWS & SRE Technologies | Stephen Abbot Tech Stack"
+	description="Comprehensive technology stack including AWS services, Terraform, Python, Shell scripting, observability tools, and infrastructure automation. Expert-level AWS and SRE capabilities."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8">
 			<Hero
 				title="Technologies"
-				tagline="Comprehensive overview of the technologies, tools, and platforms I work with daily in site reliability engineering and cloud architecture."
+				tagline="Overview of the technologies, tools, and platforms I work with in site reliability engineering and cloud architecture."
 				align="start"
 			/>
 
 			<!-- Competency Framework -->
 			<section class="competency-framework">
-				<h2>How I Assess Technical Competency</h2>
+				<h2>Technical Competency Assessment</h2>
 				<div class="framework-grid">
 					<div class="framework-item">
 						<h3>Expert</h3>
@@ -135,7 +135,7 @@ const proficiencyColors = {
 					{Object.entries(technologies).map(([category, data]) => (
 						<div class="tech-category">
 							<div class="category-header">
-								<Icon icon={data.icon} color="var(--accent-regular)" size="1.5rem" />
+								<Icon icon={data.icon} color="#c084fc" size="1.5rem" />
 								<h2>{category}</h2>
 							</div>
 							<div class="tech-grid">
@@ -165,7 +165,7 @@ const proficiencyColors = {
 			<!-- Key Technology Pills for Homepage Reference -->
 			<section class="featured-tech">
 				<h2>Core Technologies</h2>
-				<p>Primary technologies I'm known for and work with daily:</p>
+				<p>Primary technologies I work with regularly:</p>
 				<div class="pill-grid">
 					<Pill><Icon icon="code" size="1em" /> AWS</Pill>
 					<Pill><Icon icon="terminal-window" size="1em" /> Terraform</Pill>
@@ -214,7 +214,7 @@ const proficiencyColors = {
 	}
 
 	.framework-item h3 {
-		color: var(--accent-regular);
+		color: #c084fc;
 		font-size: var(--text-lg);
 		margin: 0 0 0.5rem 0;
 	}
@@ -282,7 +282,7 @@ const proficiencyColors = {
 	}
 
 	.tech-name-link:hover {
-		color: var(--accent-regular);
+		color: #c084fc;
 		text-decoration: underline;
 	}
 

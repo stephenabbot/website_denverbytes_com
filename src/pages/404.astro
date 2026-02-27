@@ -1,8 +1,22 @@
 ---
-import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Not Found" description="404 Error — this page was not found">
-	<Hero title="Page Not Found" tagline="Not found" />
+	<div class="wrapper stack gap-20">
+		<main class="stack gap-8" style="padding: 4rem 1.5rem; max-width: 50ch; margin: 0 auto; text-align: center;">
+			<h1 style="font-size: var(--text-4xl); color: var(--gray-0);">Page Not Found</h1>
+			<p style="font-size: var(--text-lg); color: var(--gray-300);">
+				This page doesn't exist or may have moved.
+			</p>
+			<nav style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
+				<a href="/" style="padding: 0.5rem 1.25rem; background: var(--accent-regular); color: var(--accent-text-over); border-radius: 999rem; text-decoration: none; font-weight: 500;">Home</a>
+				<a href="/architecture/" style="padding: 0.5rem 1.25rem; border: 1px solid var(--gray-700); color: var(--gray-300); border-radius: 999rem; text-decoration: none;">Architecture</a>
+				<a href="/experience/" style="padding: 0.5rem 1.25rem; border: 1px solid var(--gray-700); color: var(--gray-300); border-radius: 999rem; text-decoration: none;">Experience</a>
+				<a href="/work/" style="padding: 0.5rem 1.25rem; border: 1px solid var(--gray-700); color: var(--gray-300); border-radius: 999rem; text-decoration: none;">Projects</a>
+				<a href="/resume/" style="padding: 0.5rem 1.25rem; border: 1px solid var(--gray-700); color: var(--gray-300); border-radius: 999rem; text-decoration: none;">Resume</a>
+				<a href="/blog/" style="padding: 0.5rem 1.25rem; border: 1px solid var(--gray-700); color: var(--gray-300); border-radius: 999rem; text-decoration: none;">Blog</a>
+			</nav>
+		</main>
+	</div>
 </BaseLayout>

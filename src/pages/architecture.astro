@@ -1,0 +1,721 @@
+---
+import ContactCTA from "../components/ContactCTA.astro";
+import Hero from "../components/Hero.astro";
+import Icon from "../components/Icon.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Enterprise AWS Architecture Patterns | Stephen Abbot"
+	description="Enterprise AWS infrastructure architecture patterns including OIDC authentication, Terraform automation, multi-domain hosting, and observability. Proven solutions for regulated industries."
+>
+	<div class="stack gap-20">
+		<main class="wrapper architecture">
+			<Hero
+				title="Infrastructure Architecture"
+				tagline="How the pieces fit together across AWS accounts, tooling, and deployment workflows."
+			>
+				<img
+					width="1553"
+					height="873"
+					src="/assets/at-work.jpg"
+					alt="Enterprise infrastructure architecture diagram"
+				/>
+			</Hero>
+
+			<section>
+				<h2 class="section-title">The Challenge</h2>
+				<div class="content">
+					<p>
+						Modern enterprises face complex infrastructure
+						challenges that require different tools, compliance
+						patterns, and operational approaches. Rather than
+						forcing one tool for all problems, this architecture
+						demonstrates strategic tool selection based on specific
+						requirements and constraints.
+					</p>
+					<p>
+						This portfolio showcases a <strong
+							>regulated environment pattern</strong
+						> designed for organizations requiring centralized security
+						governance, audit trails, and operational excellence while
+						maintaining development team velocity.
+					</p>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">Architecture Philosophy</h2>
+				<div class="content">
+					<h3>Multi-Tool Strategy by Design</h3>
+					<p>
+						Each tool is selected for its strengths rather than
+						forcing inappropriate usage:
+					</p>
+					<ul>
+						<li>
+							<strong>CloudFormation</strong>: Immutable
+							foundation resources requiring AWS-native stability
+						</li>
+						<li>
+							<strong>Terraform</strong>: Dynamic application
+							infrastructure with complex logic and modularity
+						</li>
+						<li>
+							<strong>Bash</strong>: Operational automation and
+							integration between tools
+						</li>
+					</ul>
+
+					<h3>Separation of Concerns</h3>
+					<p>
+						The architecture separates infrastructure concerns by
+						lifecycle and risk profile:
+					</p>
+					<ul>
+						<li>
+							<strong>Foundation Layer</strong>: Deploy-once,
+							immutable infrastructure
+						</li>
+						<li>
+							<strong>Access Control Layer</strong>: Centralized
+							IAM governance with distributed consumption
+						</li>
+						<li>
+							<strong>Application Layer</strong>: Self-contained
+							projects with independent lifecycles
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">The Four-Project Foundation</h2>
+				<div class="content">
+					<div class="project-flow">
+						<div class="project-card foundation">
+							<div class="project-header">
+								<Icon icon="strategy" size="2em" />
+								<h4>Foundation Bootstrap</h4>
+								<span class="tech-badge">CloudFormation</span>
+							</div>
+							<p>
+								Solves the Terraform backend bootstrap circular
+								dependency by creating S3 state storage,
+								DynamoDB locking, and OIDC provider using
+								CloudFormation. Establishes the immutable
+								foundation that all subsequent projects depend
+								on.
+							</p>
+							<div class="project-links">
+								<a href="/work/foundation-terraform-bootstrap"
+									>View Project</a
+								>
+								<a
+									href="https://github.com/stephenabbot/foundation-terraform-bootstrap"
+									target="_blank"
+								>
+									<Icon icon="external" size="1em" /> GitHub
+								</a>
+							</div>
+						</div>
+
+						<div class="flow-arrow">↓</div>
+
+						<div class="project-card access-control">
+							<div class="project-header">
+								<Icon icon="shield" size="2em" />
+								<h4>IAM Deploy Roles</h4>
+								<span class="tech-badge">Terraform</span>
+							</div>
+							<p>
+								Eliminates credential management through OIDC
+								trust relationships. Creates repository-scoped
+								IAM roles for secure GitHub Actions deployment
+								without long-lived credentials. Provides
+								centralized security governance with audit
+								trails.
+							</p>
+							<div class="project-links">
+								<a href="/work/foundation-iam-deploy-roles"
+									>View Project</a
+								>
+								<a
+									href="https://github.com/stephenabbot/foundation-iam-deploy-roles"
+									target="_blank"
+								>
+									<Icon icon="external" size="1em" /> GitHub
+								</a>
+							</div>
+						</div>
+
+						<div class="flow-arrow">↓</div>
+
+						<div class="project-card infrastructure">
+							<div class="project-header">
+								<Icon icon="rocket-launch" size="2em" />
+								<h4>Website Infrastructure</h4>
+								<span class="tech-badge">Terraform</span>
+							</div>
+							<p>
+								Multi-domain static website hosting with
+								automated SSL certificate management, comprehensive
+								security headers, and global CDN distribution.
+								Demonstrates scalable infrastructure patterns with
+								dynamic domain discovery and service integration.
+							</p>
+							<div class="project-links">
+								<a href="/work/website-infrastructure"
+									>View Project</a
+								>
+								<a
+									href="https://github.com/stephenabbot/website-infrastructure"
+									target="_blank"
+								>
+									<Icon icon="external" size="1em" /> GitHub
+								</a>
+							</div>
+						</div>
+
+						<div class="flow-arrow">↓</div>
+
+						<div class="project-card application">
+							<div class="project-header">
+								<Icon icon="heart" size="2em" />
+								<h4>Professional Website</h4>
+								<span class="tech-badge">Astro + AWS</span>
+							</div>
+							<p>
+								This website demonstrates the complete
+								integration - using the foundation's OIDC
+								authentication, deployment roles, and hosting
+								infrastructure to deliver a professional
+								portfolio platform with automated CI/CD
+								workflows.
+							</p>
+							<div class="project-links">
+								<a href="/work/professional-website-platform"
+									>View Project</a
+								>
+								<a
+									href="https://github.com/stephenabbot/website_denverbytes_com"
+									target="_blank"
+								>
+									<Icon icon="external" size="1em" /> GitHub
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">Patterns Demonstrated</h2>
+				<div class="content">
+					<div class="patterns-grid">
+						<div class="pattern-card">
+							<h4>
+								<Icon icon="shield" size="1.2em" /> Regulated Environment
+								Compliance
+							</h4>
+							<ul>
+								<li>
+									Centralized IAM role management for audit
+									trails
+								</li>
+								<li>
+									Immutable foundation preventing
+									configuration drift
+								</li>
+								<li>
+									OIDC authentication eliminating credential
+									sprawl
+								</li>
+								<li>
+									Comprehensive resource tagging for
+									governance
+								</li>
+							</ul>
+						</div>
+
+						<div class="pattern-card">
+							<h4>
+								<Icon icon="strategy" size="1.2em" /> Operational
+								Excellence
+							</h4>
+							<ul>
+								<li>
+									Separation of concerns (foundation vs
+									application)
+								</li>
+								<li>
+									Tool selection based on strengths and
+									requirements
+								</li>
+								<li>
+									Automated prerequisite validation and error
+									handling
+								</li>
+								<li>
+									Self-contained projects enabling independent
+									lifecycles
+								</li>
+							</ul>
+						</div>
+
+						<div class="pattern-card">
+							<h4>
+								<Icon icon="rocket-launch" size="1.2em" /> Security
+								by Design
+							</h4>
+							<ul>
+								<li>
+									No long-lived credentials in CI/CD pipelines
+								</li>
+								<li>
+									Repository-scoped trust policies preventing
+									cross-contamination
+								</li>
+								<li>
+									Least privilege IAM policies generated from
+									actual usage
+								</li>
+								<li>
+									Configuration distribution via secure
+									parameter store
+								</li>
+							</ul>
+						</div>
+
+						<div class="pattern-card">
+							<h4>
+								<Icon icon="heart" size="1.2em" /> Scalability Architecture
+							</h4>
+							<ul>
+								<li>
+									Foundation supports unlimited consuming
+									projects
+								</li>
+								<li>
+									Modular Terraform design for reusable
+									patterns
+								</li>
+								<li>
+									Service discovery eliminating hardcoded
+									dependencies
+								</li>
+								<li>
+									Multi-account ready with consistent naming
+									conventions
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">Problem Solutions</h2>
+				<div class="content">
+					<div class="solutions-list">
+						<div class="solution-item">
+							<h4>Bootstrap Circular Dependencies</h4>
+							<p>
+								Uses CloudFormation to create Terraform backend
+								resources, avoiding the chicken-and-egg problem
+								of Terraform managing its own state
+								infrastructure.
+							</p>
+						</div>
+
+						<div class="solution-item">
+							<h4>Credential Management at Scale</h4>
+							<p>
+								Implements OIDC trust relationships enabling
+								secure CI/CD without managing, rotating, or
+								storing long-lived access keys across multiple
+								repositories.
+							</p>
+						</div>
+
+						<div class="solution-item">
+							<h4>Regulatory Compliance Requirements</h4>
+							<p>
+								Provides centralized IAM governance while
+								maintaining project autonomy, satisfying both
+								security team oversight and development team
+								velocity needs.
+							</p>
+						</div>
+
+						<div class="solution-item">
+							<h4>Multi-Tool Integration</h4>
+							<p>
+								Demonstrates when and how to combine
+								CloudFormation, Terraform, and operational
+								scripts to leverage each tool's strengths rather
+								than forcing inappropriate tool usage.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">Target Audience</h2>
+				<div class="content">
+					<p>
+						This architecture addresses requirements common in
+						regulated and enterprise environments:
+					</p>
+					<div class="audience-grid">
+						<div class="audience-card">
+							<h4>Financial Services</h4>
+							<p>
+								Regulatory compliance with operational
+								efficiency
+							</p>
+						</div>
+						<div class="audience-card">
+							<h4>Healthcare</h4>
+							<p>HIPAA compliance with development agility</p>
+						</div>
+						<div class="audience-card">
+							<h4>Government</h4>
+							<p>Security requirements with audit capabilities</p>
+						</div>
+						<div class="audience-card">
+							<h4>Enterprise</h4>
+							<p>Governance needs with team autonomy</p>
+						</div>
+					</div>
+					<p>
+						<strong
+							>The portfolio demonstrates technical
+							competency and architectural judgment in solving
+							complex infrastructure challenges.</strong
+						>
+					</p>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">
+					Cost-Effective Architecture
+				</h2>
+				<div class="content">
+					<p>
+						This infrastructure foundation is
+						completely serverless, scales automatically with demand,
+						and currently costs approximately $3 per month to operate
+						for all hosting infrastructure.
+					</p>
+					<div class="cost-benefits">
+						<div class="benefit-item">
+							<h4>Serverless Architecture</h4>
+							<p>
+								No servers to manage, patch, or scale - all
+								services are fully managed AWS offerings
+							</p>
+						</div>
+						<div class="benefit-item">
+							<h4>Automatic Scaling</h4>
+							<p>
+								Infrastructure scales from zero to enterprise
+								load without configuration changes
+							</p>
+						</div>
+						<div class="benefit-item">
+							<h4>Pay-Per-Use Pricing</h4>
+							<p>
+								Costs scale with actual usage - supporting both
+								experimentation and production workloads
+							</p>
+						</div>
+						<div class="benefit-item">
+							<h4>Extensible Foundation</h4>
+							<p>
+								Additional projects leverage existing
+								infrastructure without duplicating foundational
+								costs
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				<h2 class="section-title">Building on This Foundation</h2>
+				<div class="content">
+					<p>
+						With these four foundational projects in place, new
+						projects can be created that leverage the established
+						patterns:
+					</p>
+					<ul>
+						<li>
+							<strong>Observability platforms</strong> using the same
+							OIDC authentication and deployment patterns
+						</li>
+						<li>
+							<strong>Data processing pipelines</strong> with consistent
+							IAM governance and state management
+						</li>
+						<li>
+							<strong>API services</strong> following the same security
+							and operational excellence principles
+						</li>
+						<li>
+							<strong>Compliance frameworks</strong> building on the
+							established audit and governance patterns
+						</li>
+					</ul>
+					<p>
+						Each new project benefits from the foundation's
+						security, operational excellence, and architectural
+						consistency while maintaining independence and focused
+						scope.
+					</p>
+				</div>
+			</section>
+		</main>
+
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
+<style>
+	.architecture {
+		display: flex;
+		flex-direction: column;
+		gap: 3.5rem;
+	}
+
+	img {
+		margin-top: 1.5rem;
+		border-radius: 1.5rem;
+		box-shadow: var(--shadow-md);
+	}
+
+	section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		color: var(--gray-200);
+	}
+
+	.section-title {
+		grid-column-start: 1;
+		font-size: var(--text-xl);
+		color: var(--gray-0);
+	}
+
+	.content {
+		grid-column: 2 / 4;
+	}
+
+	.content h3 {
+		color: var(--gray-100);
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.content ul {
+		margin: 0.5rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.content li {
+		margin-bottom: 0.25rem;
+	}
+
+	.project-flow {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin: 2rem 0;
+	}
+
+	.project-card {
+		background: var(--gradient-subtle);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		padding: 1.5rem;
+		box-shadow: var(--shadow-sm);
+	}
+
+	.project-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.project-header h4 {
+		color: var(--gray-0);
+		margin: 0;
+		flex: 1;
+	}
+
+	.tech-badge {
+		background: var(--accent-regular);
+		color: var(--accent-text-over);
+		padding: 0.25rem 0.75rem;
+		border-radius: 0.5rem;
+		font-size: var(--text-sm);
+		font-weight: 500;
+	}
+
+	.project-links {
+		display: flex;
+		gap: 1rem;
+		margin-top: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.project-links a {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--accent-regular);
+		text-decoration: none;
+		font-weight: 500;
+		transition: color var(--theme-transition);
+	}
+
+	.project-links a:hover {
+		color: var(--accent-light);
+	}
+
+	.flow-arrow {
+		text-align: center;
+		font-size: 2rem;
+		color: var(--accent-regular);
+		margin: 0.5rem 0;
+	}
+
+	.patterns-grid {
+		display: grid;
+		gap: 1.5rem;
+		margin: 2rem 0;
+	}
+
+	.pattern-card {
+		background: var(--gradient-subtle);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.75rem;
+		padding: 1.25rem;
+	}
+
+	.pattern-card h4 {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--gray-0);
+		margin-bottom: 0.75rem;
+	}
+
+	.pattern-card ul {
+		margin: 0;
+		padding-left: 1.25rem;
+	}
+
+	.solutions-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin: 2rem 0;
+	}
+
+	.solution-item h4 {
+		color: var(--gray-0);
+		margin-bottom: 0.5rem;
+	}
+
+	.audience-grid {
+		display: grid;
+		gap: 1rem;
+		margin: 1.5rem 0;
+	}
+
+	.audience-card {
+		background: var(--gradient-subtle);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		padding: 1rem;
+		text-align: center;
+	}
+
+	.audience-card h4 {
+		color: var(--gray-0);
+		margin-bottom: 0.5rem;
+	}
+
+	.cost-benefits {
+		display: grid;
+		gap: 1rem;
+		margin: 1.5rem 0;
+	}
+
+	.benefit-item {
+		background: var(--gradient-subtle);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		padding: 1rem;
+	}
+
+	.benefit-item h4 {
+		color: var(--gray-0);
+		margin-bottom: 0.5rem;
+	}
+
+	.content :global(a) {
+		text-decoration: 1px solid underline transparent;
+		text-underline-offset: 0.25em;
+		transition: text-decoration-color var(--theme-transition);
+	}
+
+	.content :global(a:hover),
+	.content :global(a:focus) {
+		text-decoration-color: currentColor;
+	}
+
+	@media (min-width: 50em) {
+		.architecture {
+			display: grid;
+			grid-template-columns: 1fr 60% 1fr;
+		}
+
+		.architecture > :global(:first-child) {
+			grid-column-start: 2;
+		}
+
+		section {
+			display: contents;
+			font-size: var(--text-lg);
+		}
+
+		.patterns-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.audience-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		.project-flow {
+			gap: 1.5rem;
+		}
+
+		.flow-arrow {
+			margin: 1rem 0;
+		}
+	}
+
+	@media (min-width: 72em) {
+		.audience-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+</style>

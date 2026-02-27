@@ -12,6 +12,7 @@ export const collections = {
 			tags: z.array(z.string()),
 			img: z.string(),
 			img_alt: z.string().optional(),
+			repo: z.string().url().optional(),
 		}),
 	}),
 	blog: defineCollection({
@@ -36,6 +37,20 @@ export const collections = {
 			endDate: z.coerce.date().optional(),
 			highlights: z.array(z.string()),
 			order: z.number(),
+		}),
+	}),
+	resume: defineCollection({
+		// Load Markdown files in the src/content/resume directory.
+		loader: glob({ base: './src/content/resume', pattern: '**/*.md' }),
+		schema: z.object({
+			name: z.string(),
+			title: z.string(),
+			location: z.string(),
+			website: z.string(),
+			github: z.string(),
+			linkedin: z.string(),
+			certifications: z.array(z.string()),
+			summary: z.string(),
 		}),
 	}),
 };

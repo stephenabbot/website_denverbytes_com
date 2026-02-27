@@ -6,19 +6,20 @@ import Hero from "../components/Hero.astro";
 import Icon from "../components/Icon.astro";
 
 // Get all experience entries, sorted by order
-const experiences = (await getCollection("experience"))
-	.sort((a, b) => a.data.order - b.data.order);
+const experiences = (await getCollection("experience")).sort(
+	(a, b) => a.data.order - b.data.order,
+);
 ---
 
 <BaseLayout
-	title="Experience | Stephen Abbot"
-	description="Professional experience and career journey of Stephen Abbot, Senior Site Reliability Engineer"
+	title="Professional Experience | Senior SRE Stephen Abbot"
+	description="20+ years in technology from principal architect at Digital Equipment Corporation to senior SRE. AWS infrastructure automation, Terraform, observability, and enterprise cloud solutions expertise."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8">
 			<Hero
 				title="Experience"
-				tagline="20+ years of technology leadership, from software development to enterprise-scale site reliability engineering."
+				tagline="20+ years of technology leadership, from software development to site reliability engineering across 800+ account AWS organizations."
 				align="start"
 			/>
 
@@ -35,28 +36,77 @@ const experiences = (await getCollection("experience"))
 						</div>
 					</div>
 					<div class="role-description">
-						<p>Leading cloud enablement initiatives across <strong>800+ AWS accounts</strong> for a Fortune 23 healthcare company serving 50,000+ employees and 200+ engineering teams. Building scalable automation tools that improve governance while enabling team productivity.</p>
+						<p>
+							Leading cloud enablement initiatives across <strong
+								>hundreds of AWS accounts</strong
+							> for a Fortune 23 healthcare company serving 50,000+
+							employees and 200+ engineering teams. Building scalable
+							automation tools that improve governance while enabling
+							team productivity.
+						</p>
 					</div>
-					
+
 					<div class="signature-project">
-						<h4>Signature Achievement: AWS Technical Debt Analysis Platform</h4>
+						<h4>
+							Signature Achievement: AWS Technical Debt Analysis
+							Platform
+						</h4>
 						<div class="project-details">
 							<div class="challenge">
 								<h5>The Challenge</h5>
-								<p>Engineering teams across 50+ AWS accounts lacked visibility into resource utilization, compliance gaps, and cost optimization opportunities. Manual auditing was impossible at scale.</p>
+								<p>
+									Engineering teams across 50+ AWS accounts
+									lacked visibility into resource utilization,
+									compliance gaps, and cost optimization
+									opportunities. Manual auditing was
+									impossible at scale.
+								</p>
 							</div>
 							<div class="solution">
 								<h5>My Approach</h5>
-								<p>Architected a comprehensive Python/PostgreSQL platform that automatically scans AWS accounts and inventories all resources with operational characteristics, cost data, and compliance findings. Used a single-table design with dynamic views for sub-100ms query performance.</p>
+								<p>
+									Architected a comprehensive
+									Python/PostgreSQL platform that
+									automatically scans AWS accounts and
+									inventories all resources with operational
+									characteristics, cost data, and compliance
+									findings. Used a single-table design with
+									dynamic views for sub-100ms query
+									performance.
+								</p>
 							</div>
 							<div class="impact">
 								<h5>Results & Impact</h5>
 								<ul>
-									<li><strong>Discovered orphaned resources</strong> previously undocumented, saving ongoing costs</li>
-									<li><strong>Identified improper tagging</strong> and clickops-created resources affecting governance</li>
-									<li><strong>Automated Trusted Advisor summaries</strong> in tabular format for team convenience</li>
-									<li><strong>Enabled granular spend analysis</strong> by resource type with 3-month historical trends</li>
-									<li><strong>Built extensible architecture</strong> for adding new resource types and compliance checks</li>
+									<li>
+										<strong
+											>Discovered orphaned resources</strong
+										> previously undocumented, saving ongoing
+										costs
+									</li>
+									<li>
+										<strong
+											>Identified improper tagging</strong
+										> and clickops-created resources affecting
+										governance
+									</li>
+									<li>
+										<strong
+											>Automated Trusted Advisor summaries</strong
+										> in tabular format for team convenience
+									</li>
+									<li>
+										<strong
+											>Enabled granular spend analysis</strong
+										> by resource type with 3-month historical
+										trends
+									</li>
+									<li>
+										<strong
+											>Built extensible architecture</strong
+										> for adding new resource types and compliance
+										checks
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -65,9 +115,22 @@ const experiences = (await getCollection("experience"))
 					<div class="other-achievements">
 						<h4>Additional Contributions</h4>
 						<ul>
-							<li><strong>CloudWatch Alarming Automation:</strong> Reduced monitoring setup from weeks to days with hierarchical CSV-based configuration supporting team, environment, and resource-specific overrides</li>
-							<li><strong>Sensitive Data Detection:</strong> Implemented automated pattern matching for CloudWatch logs using regex taxonomy classification</li>
-							<li><strong>Team Enablement:</strong> Serve as AWS architecture expert for 20-person engineering team, mentoring on Well-Architected principles</li>
+							<li>
+								<strong>CloudWatch Alarming Automation:</strong> Reduced
+								monitoring setup from weeks to days with hierarchical
+								CSV-based configuration supporting team, environment,
+								and resource-specific overrides
+							</li>
+							<li>
+								<strong>Sensitive Data Detection:</strong> Implemented
+								automated pattern matching for CloudWatch logs using
+								regex taxonomy classification
+							</li>
+							<li>
+								<strong>Team Enablement:</strong> Serve as AWS architecture
+								expert for 20-person engineering team, mentoring on
+								Well-Architected principles
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -81,16 +144,36 @@ const experiences = (await getCollection("experience"))
 						<div class="exp-header">
 							<h3>Site Reliability Engineer</h3>
 							<div class="exp-meta">
-								<span class="company">Smartly (via acquisition)</span>
+								<span class="company"
+									>Smartly (via acquisition)</span
+								>
 								<span class="dates">Mar 2022 - Nov 2023</span>
 							</div>
 						</div>
 						<div class="exp-content">
-							<p><strong>Infrastructure Modernization Lead:</strong> Guided AI-focused engineering teams through migration from Elastic Beanstalk to containerized microservices architecture.</p>
+							<p>
+								<strong
+									>Infrastructure Modernization Lead:</strong
+								> Guided AI-focused engineering teams through migration
+								from Elastic Beanstalk to containerized microservices
+								architecture.
+							</p>
 							<ul>
-								<li><strong>Performance Optimization:</strong> Improved global response times 50-80% through CloudFront optimization, RUM analysis, and PostgreSQL tuning</li>
-								<li><strong>Architecture Migration:</strong> Led transition to Lambda, ECS, EKS reducing costs and operational overhead</li>
-								<li><strong>Observability Framework:</strong> Built comprehensive monitoring using CloudWatch, OpenTelemetry, and distributed tracing</li>
+								<li>
+									<strong>Performance Optimization:</strong> Improved
+									global response times 50-80% through CloudFront
+									optimization, RUM analysis, and PostgreSQL tuning
+								</li>
+								<li>
+									<strong>Architecture Migration:</strong> Led transition
+									to Lambda, ECS, EKS reducing costs and operational
+									overhead
+								</li>
+								<li>
+									<strong>Observability Framework:</strong> Built
+									comprehensive monitoring using CloudWatch, OpenTelemetry,
+									and distributed tracing
+								</li>
 							</ul>
 						</div>
 					</article>
@@ -104,11 +187,28 @@ const experiences = (await getCollection("experience"))
 							</div>
 						</div>
 						<div class="exp-content">
-							<p><strong>Observability Platform Architect:</strong> Designed end-to-end monitoring solution for pre-IPO HR SaaS platform serving enterprise clients.</p>
+							<p>
+								<strong
+									>Observability Platform Architect:</strong
+								> Designed end-to-end monitoring solution for pre-IPO
+								HR SaaS platform serving enterprise clients.
+							</p>
 							<ul>
-								<li><strong>Splunk Administration:</strong> Built and maintained on-premises cluster with consolidated operational dashboards</li>
-								<li><strong>Synthetic Monitoring:</strong> Created BDD-based framework for automated production testing every 10 minutes</li>
-								<li><strong>Incident Response:</strong> Established structured logging standards and notification architecture using SNS/Lambda</li>
+								<li>
+									<strong>Splunk Administration:</strong> Built
+									and maintained on-premises cluster with consolidated
+									operational dashboards
+								</li>
+								<li>
+									<strong>Synthetic Monitoring:</strong> Created
+									BDD-based framework for automated production testing
+									every 10 minutes
+								</li>
+								<li>
+									<strong>Incident Response:</strong> Established
+									structured logging standards and notification
+									architecture using SNS/Lambda
+								</li>
 							</ul>
 						</div>
 					</article>
@@ -121,15 +221,32 @@ const experiences = (await getCollection("experience"))
 				<div class="philosophy-content">
 					<div class="philosophy-item">
 						<h4>AI-Enhanced Delivery</h4>
-						<p>Leveraging AI collaboration to accelerate solution development by an order of magnitude. This entire website and supporting AWS infrastructure was designed and implemented in 3 months - work that traditionally required dedicated teams.</p>
+						<p>
+							Using Claude Code, GitHub Copilot, and targeted LLM
+							workflows to compress weeks of work into days. This
+							website and its supporting AWS infrastructure were
+							designed and implemented in 3 months by one person —
+							work that typically involves multiple specialists
+							(infra, frontend, CI/CD).
+						</p>
 					</div>
 					<div class="philosophy-item">
 						<h4>Foundational Thinking</h4>
-						<p>Focus on building solutions that anticipate future needs. Design for metadata inclusion, extensibility, and operational simplicity. Small foundational decisions compound into significant long-term value.</p>
+						<p>
+							Focus on building solutions that anticipate future
+							needs. Design for metadata inclusion, extensibility,
+							and operational simplicity. Small foundational
+							decisions compound into significant long-term value.
+						</p>
 					</div>
 					<div class="philosophy-item">
 						<h4>Show Don't Tell</h4>
-						<p>Demonstrate capability through actual solutions rather than claims. Every project in my portfolio is live, functional, and represents real-world problem-solving at enterprise scale.</p>
+						<p>
+							Demonstrate capability through actual solutions
+							rather than claims. Every project in my portfolio is
+							live, functional, and publicly available with source
+							code you can inspect.
+						</p>
 					</div>
 				</div>
 			</section>
@@ -139,14 +256,22 @@ const experiences = (await getCollection("experience"))
 				<h2 class="section-title">Certifications</h2>
 				<div class="certifications">
 					<div class="cert-card">
-						<Icon icon="trophy" color="var(--accent-regular)" size="2rem" />
+						<Icon
+							icon="trophy"
+							color="var(--trophy-color)"
+							size="2rem"
+						/>
 						<div class="cert-info">
 							<h3>AWS Certified Cloud Practitioner</h3>
 							<p>Amazon Web Services</p>
 						</div>
 					</div>
 					<div class="cert-card">
-						<Icon icon="trophy" color="var(--accent-regular)" size="2rem" />
+						<Icon
+							icon="trophy"
+							color="var(--trophy-color)"
+							size="2rem"
+						/>
 						<div class="cert-info">
 							<h3>AWS Certified AI Practitioner</h3>
 							<p>Amazon Web Services</p>
@@ -161,15 +286,21 @@ const experiences = (await getCollection("experience"))
 				<div class="metrics">
 					<div class="metric-card">
 						<div class="metric-number">800+</div>
-						<div class="metric-label">AWS Accounts in Organization</div>
+						<div class="metric-label">
+							AWS Accounts in a Single Org
+						</div>
+					</div>
+					<div class="metric-card">
+						<div class="metric-number">10+</div>
+						<div class="metric-label">
+							Engineering Teams Enabled
+						</div>
 					</div>
 					<div class="metric-card">
 						<div class="metric-number">40+</div>
-						<div class="metric-label">Teams Directly Supported</div>
-					</div>
-					<div class="metric-card">
-						<div class="metric-number">20+</div>
-						<div class="metric-label">Years in Technology</div>
+						<div class="metric-label">
+							Accounts Analyzed in Depth
+						</div>
 					</div>
 				</div>
 			</section>
@@ -180,6 +311,15 @@ const experiences = (await getCollection("experience"))
 </BaseLayout>
 
 <style>
+	/* Trophy color variable */
+	:root {
+		--trophy-color: var(--gray-0);
+	}
+
+	:root.theme-dark {
+		--trophy-color: #c084fc;
+	}
+
 	.section {
 		margin-bottom: 3rem;
 	}
@@ -214,10 +354,15 @@ const experiences = (await getCollection("experience"))
 
 	.company {
 		font-weight: 600;
-		color: var(--accent-regular);
+		color: var(--gray-0);
 	}
 
-	.location, .dates {
+	:root.theme-dark .company {
+		color: #c084fc;
+	}
+
+	.location,
+	.dates {
 		color: var(--gray-400);
 	}
 
@@ -234,9 +379,13 @@ const experiences = (await getCollection("experience"))
 	}
 
 	.signature-project h4 {
-		color: var(--accent-regular);
+		color: var(--gray-0);
 		font-size: var(--text-lg);
 		margin: 0 0 1rem 0;
+	}
+
+	:root.theme-dark .signature-project h4 {
+		color: #c084fc;
 	}
 
 	.project-details {
@@ -244,29 +393,43 @@ const experiences = (await getCollection("experience"))
 		gap: 1.5rem;
 	}
 
-	.challenge, .solution, .impact {
+	.challenge,
+	.solution,
+	.impact {
 		background: var(--gray-999_20);
 		border: 1px solid var(--gray-700);
 		border-radius: 0.5rem;
 		padding: 1rem;
 	}
 
-	.challenge h5, .solution h5, .impact h5 {
-		color: var(--gray-100);
+	.challenge h5 {
+		color: var(--gray-0);
 		font-size: var(--text-base);
 		margin: 0 0 0.5rem 0;
 	}
 
-	.challenge h5 {
-		color: var(--accent-light);
+	:root.theme-dark .challenge h5 {
+		color: #c084fc;
 	}
 
 	.solution h5 {
-		color: var(--accent-regular);
+		color: var(--gray-0);
+		font-size: var(--text-base);
+		margin: 0 0 0.5rem 0;
+	}
+
+	:root.theme-dark .solution h5 {
+		color: #c084fc;
 	}
 
 	.impact h5 {
-		color: var(--accent-dark);
+		color: var(--gray-0);
+		font-size: var(--text-base);
+		margin: 0 0 0.5rem 0;
+	}
+
+	:root.theme-dark .impact h5 {
+		color: #c084fc;
 	}
 
 	.project-details p {
@@ -358,7 +521,7 @@ const experiences = (await getCollection("experience"))
 	}
 
 	.exp-content li::before {
-		content: '•';
+		content: "•";
 		position: absolute;
 		left: 0;
 		color: var(--accent-regular);
@@ -436,8 +599,12 @@ const experiences = (await getCollection("experience"))
 	.metric-number {
 		font-size: var(--text-4xl);
 		font-weight: 700;
-		color: var(--accent-regular);
+		color: var(--gray-0);
 		margin-bottom: 0.5rem;
+	}
+
+	:root.theme-dark .metric-number {
+		color: #c084fc;
 	}
 
 	.metric-label {

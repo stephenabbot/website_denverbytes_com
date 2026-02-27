@@ -4,27 +4,99 @@ import "../styles/global.css";
 interface Props {
 	title?: string | undefined;
 	description?: string | undefined;
+	image?: string | undefined;
+	type?: 'website' | 'article' | undefined;
+	publishDate?: Date | undefined;
 }
 
 const {
-	title = "Stephen Abbot: Personal Site",
-	description = "The personal site of Stephen Abbot",
+	title = "Stephen Abbot: Senior SRE | AWS & Infrastructure Automation",
+	description = "Senior SRE specializing in AWS infrastructure automation, Terraform, and enterprise cloud architecture. Denver-based with AWS certifications.",
+	image = "/assets/at-work.jpg",
+	type = "website",
+	publishDate
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.url);
+
+// Person Schema for Stephen Abbot
+const personSchema = {
+	"@context": "https://schema.org",
+	"@type": "Person",
+	"name": "Stephen Abbot",
+	"jobTitle": "Senior Site Reliability Engineer",
+	"description": "Senior SRE specializing in AWS infrastructure automation, Terraform, and enterprise cloud architecture",
+	"url": Astro.site?.href ?? "https://denverbytes.com",
+	"email": "stephen.abbot@denverbytes.com",
+	"address": {
+		"@type": "PostalAddress",
+		"addressLocality": "Denver",
+		"addressRegion": "Colorado",
+		"addressCountry": "USA"
+	},
+	"sameAs": [
+		"https://linkedin.com/in/stephenabbot",
+		"https://github.com/stephenabbot"
+	],
+	"knowsAbout": [
+		"AWS", "Site Reliability Engineering", "Terraform", "Infrastructure as Code", 
+		"CloudTrail", "Observability", "Python", "Shell Scripting", "Cloud Architecture"
+	],
+	"hasCredential": [
+		"AWS Cloud Practitioner Certification",
+		"AWS Solutions Architect Associate Certification"
+	]
+};
+
+// Article Schema for blog posts
+const articleSchema = type === 'article' && publishDate ? {
+	"@context": "https://schema.org",
+	"@type": "Article",
+	"headline": title,
+	"description": description,
+	"author": {
+		"@type": "Person",
+		"name": "Stephen Abbot"
+	},
+	"datePublished": publishDate.toISOString(),
+	"url": canonicalURL.href,
+	"image": socialImageURL.href
+} : null;
 ---
 
 <meta charset="UTF-8" />
-<meta name="description" property="og:description" content={description} />
+<meta name="description" content={description || "Senior SRE specializing in AWS infrastructure automation, Terraform, and enterprise cloud architecture. Denver-based with AWS certifications."} />
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
 
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={socialImageURL} />
+<meta property="og:site_name" content="Stephen Abbot" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImageURL} />
+
+<!-- Additional SEO -->
+<meta name="author" content="Stephen Abbot" />
+<meta name="robots" content="index, follow" />
+
+<!-- Schema.org JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+{articleSchema && <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />}
+
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400&family=Rubik:wght@500;600&display=swap"
-	rel="stylesheet"
-/>
 <script is:inline>
 	// This code is inlined in the head to make dark mode instant & blocking.
 	const getThemePreference = () => {

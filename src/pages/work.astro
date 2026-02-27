@@ -1,88 +1,253 @@
 ---
-import { getCollection } from "astro:content";
 import ContactCTA from "../components/ContactCTA.astro";
-import Grid from "../components/Grid.astro";
 import Hero from "../components/Hero.astro";
-import PortfolioPreview from "../components/PortfolioPreview.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const allProjects = (await getCollection("work")).sort(
-	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
-);
-
-// Group projects by logical dependencies and usage order
-const foundationProjects = allProjects.filter(project => 
-	project.data.title.includes("Foundation") || 
-	project.data.title.includes("Bootstrap")
-);
-
-const infrastructureProjects = allProjects.filter(project => 
-	project.data.title.includes("Website Infrastructure") ||
-	project.data.title.includes("Service Observability") ||
-	project.data.title.includes("Service Ephemeral")
-);
-
-const communityProjects = allProjects.filter(project => 
-	project.data.title.includes("mypylogger")
-);
+import Icon from "../components/Icon.astro";
 ---
 
 <BaseLayout
-	title="My Work | Stephen Abbot"
-	description="Comprehensive portfolio of AWS infrastructure projects demonstrating enterprise-grade SRE expertise"
+	title="Projects | Stephen Abbot"
+	description="AWS infrastructure projects spanning enterprise tooling, foundation infrastructure, observability services, and platform engineering. Each project is live, documented, and publicly available."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-12">
 			<Hero
-				title="My Work"
-				tagline="A comprehensive portfolio of AWS infrastructure projects that demonstrate enterprise-grade SRE expertise, from foundational components to specialized services."
+				title="Projects"
+				tagline="These projects form a cohesive platform for AWS infrastructure — from account bootstrapping through application deployment. Every project is live, documented, and publicly available."
 				align="start"
 			/>
-			
-			<!-- Foundation Projects -->
+
+			<!-- Enterprise Tools -->
 			<section class="project-group">
-				<header class="group-header">
-					<h2>Foundation Infrastructure</h2>
-					<p>Core infrastructure components that establish the foundation for all subsequent projects. These solve fundamental problems like backend state management, secure authentication, and deployment automation.</p>
-				</header>
-				<Grid variant="offset">
-					{foundationProjects.map((project) => (
-						<li>
-							<PortfolioPreview project={project} />
-						</li>
-					))}
-				</Grid>
+				<h2 class="group-title">Enterprise Tools</h2>
+				<p class="group-desc">
+					Projects addressing problems at organizational scale: multi-account visibility,
+					cost analysis, security findings, and operational workflows.
+				</p>
+				<table class="project-table">
+					<thead>
+						<tr>
+							<th>Project</th>
+							<th>Description</th>
+							<th class="col-links">Links</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="featured-row">
+							<td class="project-name">
+								<a href="/work/tdt-technical-debt-tool/">Technical Debt Tool</a>
+								<span class="badge">Flagship</span>
+							</td>
+							<td class="project-desc">
+								Programmatic analysis platform scanning AWS accounts for phantom resources,
+								security misconfigurations, IAM overprovisioning, and cost waste.
+								Deployed across 40+ accounts in an 800+ account org.
+								<em class="outcome">Outcome: centralized visibility where none existed.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/tdt-technical-debt-tool/" class="btn-link">Case Study</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="project-name">
+								<a href="/work/service-email-handler/">Email Handler</a>
+							</td>
+							<td class="project-desc">
+								AWS-native email pipeline: SES receipt, Lambda-based spam filtering,
+								auto-acknowledgment, reply routing, and DynamoDB conversation tracking.
+								<em class="outcome">Outcome: zero-maintenance contact management at pennies/month.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/service-email-handler/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/service-email-handler" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</section>
 
-			<!-- Infrastructure Services -->
+			<!-- Foundation Infrastructure -->
 			<section class="project-group">
-				<header class="group-header">
-					<h2>Infrastructure Services</h2>
-					<p>Specialized infrastructure services that build upon the foundation to provide scalable hosting, comprehensive observability, and cost-optimized analytics capabilities.</p>
-				</header>
-				<Grid variant="offset">
-					{infrastructureProjects.map((project) => (
-						<li>
-							<PortfolioPreview project={project} />
-						</li>
-					))}
-				</Grid>
+				<h2 class="group-title">Foundation Infrastructure</h2>
+				<p class="group-desc">
+					Reusable infrastructure primitives that solve the bootstrap problem:
+					how do you create Terraform state storage before Terraform exists,
+					and how do you deploy securely without long-lived credentials?
+				</p>
+				<table class="project-table">
+					<thead>
+						<tr>
+							<th>Project</th>
+							<th>Description</th>
+							<th class="col-links">Links</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="project-name">
+								<a href="/work/foundation-terraform-bootstrap/">Terraform Bootstrap</a>
+							</td>
+							<td class="project-desc">
+								CloudFormation-managed S3 state bucket, DynamoDB lock table, and OIDC
+								provider. Solves the circular dependency of managing Terraform's own
+								backend with Terraform.
+								<em class="outcome">Outcome: repeatable account bootstrapping in minutes.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/foundation-terraform-bootstrap/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/foundation-terraform-bootstrap" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="project-name">
+								<a href="/work/foundation-iam-deploy-roles/">IAM Deploy Roles</a>
+							</td>
+							<td class="project-desc">
+								Terraform-managed IAM roles for GitHub Actions OIDC authentication.
+								Eliminates static credentials from CI/CD pipelines using short-lived
+								tokens scoped per repository and environment.
+								<em class="outcome">Outcome: zero stored secrets across all deploy pipelines.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/foundation-iam-deploy-roles/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/foundation-iam-deploy-roles" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</section>
 
-			<!-- Community Contributions -->
+			<!-- Services & Tools -->
 			<section class="project-group">
-				<header class="group-header">
-					<h2>Open Source Contributions</h2>
-					<p>Community-focused projects that demonstrate software engineering excellence and commitment to knowledge sharing through reusable tools and libraries.</p>
-				</header>
-				<Grid variant="offset">
-					{communityProjects.map((project) => (
-						<li>
-							<PortfolioPreview project={project} />
-						</li>
-					))}
-				</Grid>
+				<h2 class="group-title">Services &amp; Tools</h2>
+				<p class="group-desc">
+					Specialized services and utilities: observability infrastructure,
+					ephemeral compute, and Python tooling.
+				</p>
+				<table class="project-table">
+					<thead>
+						<tr>
+							<th>Project</th>
+							<th>Description</th>
+							<th class="col-links">Links</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="project-name">
+								<a href="/work/service-observability-cloudtrail/">CloudTrail Observability</a>
+							</td>
+							<td class="project-desc">
+								CloudFormation infrastructure for centralized AWS audit logging.
+								Establishes account-level event visibility as a compliance and
+								forensic baseline.
+								<em class="outcome">Outcome: complete API audit trail for governance and incident response.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/service-observability-cloudtrail/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/service-observability-cloudtrail" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="project-name">
+								<a href="/work/service-ephemeral-splunk/">Ephemeral Splunk</a>
+							</td>
+							<td class="project-desc">
+								Automated infrastructure for deploying and destroying Splunk Enterprise
+								instances on demand. Purpose-built for log analysis workflows that do
+								not justify a persistent deployment.
+								<em class="outcome">Outcome: zero idle costs for intermittent analysis needs.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/service-ephemeral-splunk/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/service-ephemeral-splunk" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="project-name">
+								<a href="/work/mypylogger/">mypylogger</a>
+							</td>
+							<td class="project-desc">
+								Zero-dependency Python logging library with clean JSON output and
+								sensible defaults. Extracted from production Lambda code to be
+								reusable across projects.
+								<em class="outcome">Outcome: consistent structured logging across all Python services.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/mypylogger/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/mypylogger" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</section>
+
+			<!-- Website Platform -->
+			<section class="project-group">
+				<h2 class="group-title">Website Platform</h2>
+				<p class="group-desc">
+					The infrastructure and application behind this site.
+					Production hosting at ~$3/month using S3, CloudFront, and Route53.
+				</p>
+				<table class="project-table">
+					<thead>
+						<tr>
+							<th>Project</th>
+							<th>Description</th>
+							<th class="col-links">Links</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="project-name">
+								<a href="/work/professional-website-platform/">Website Platform</a>
+							</td>
+							<td class="project-desc">
+								Astro-based website with GitHub Actions CI/CD, OIDC deploy
+								authentication, automated CloudFront invalidation, and full
+								infrastructure as code.
+								<em class="outcome">Outcome: push-to-deploy with zero manual steps.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/professional-website-platform/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/website_denverbytes_com" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="project-name">
+								<a href="/work/website-infrastructure/">Website Infrastructure</a>
+							</td>
+							<td class="project-desc">
+								Multi-domain static hosting infrastructure: S3 with versioning,
+								CloudFront distribution, ACM certificate, and Route53 DNS.
+								Terraform-managed with automated deploy pipeline.
+								<em class="outcome">Outcome: production hosting at ~$3/month with global CDN.</em>
+							</td>
+							<td class="project-links-cell">
+								<a href="/work/website-infrastructure/" class="btn-link">Details</a>
+								<a href="https://github.com/stephenabbot/website-infrastructure" target="_blank" rel="noopener" class="btn-link btn-link--ghost">
+									<Icon icon="github-logo" size="1em" /> GitHub
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
 		</main>
 		<ContactCTA />
 	</div>
@@ -92,29 +257,162 @@ const communityProjects = allProjects.filter(project =>
 	.project-group {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 1rem;
 	}
 
-	.group-header {
-		text-align: center;
-		max-width: 60ch;
-		margin: 0 auto;
-	}
-
-	.group-header h2 {
+	.group-title {
 		font-size: var(--text-2xl);
 		color: var(--gray-0);
-		margin-bottom: 0.5rem;
 	}
 
-	.group-header p {
-		font-size: var(--text-lg);
-		color: var(--gray-300);
+	.group-desc {
+		font-size: var(--text-md);
+		color: var(--gray-400);
 		line-height: 1.6;
+		max-width: 65ch;
+	}
+
+	.project-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--text-sm);
+	}
+
+	.project-table thead th {
+		text-align: left;
+		padding: 0.5rem 0.75rem;
+		color: var(--gray-500);
+		font-weight: 500;
+		border-bottom: 1px solid var(--gray-800);
+		font-size: var(--text-xs, 0.75rem);
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+
+	.project-table tbody tr {
+		border-bottom: 1px solid var(--gray-800);
+		transition: background-color var(--theme-transition);
+	}
+
+	.project-table tbody tr:last-child {
+		border-bottom: none;
+	}
+
+	.project-table tbody tr:hover {
+		background-color: var(--accent-subtle-overlay);
+	}
+
+	.project-table td {
+		padding: 0.875rem 0.75rem;
+		vertical-align: top;
+	}
+
+	.project-name {
+		white-space: nowrap;
+		width: 14rem;
+	}
+
+	.project-name a {
+		color: var(--gray-0);
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+	.project-name a:hover {
+		color: var(--accent-regular);
+	}
+
+	.badge {
+		display: inline-block;
+		margin-left: 0.5rem;
+		padding: 0.1rem 0.5rem;
+		background: var(--accent-regular);
+		color: var(--accent-text-over);
+		border-radius: 999rem;
+		font-size: 0.65rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		vertical-align: middle;
+	}
+
+	.featured-row {
+		background: var(--gradient-subtle);
+	}
+
+	.project-desc {
+		color: var(--gray-300);
+		line-height: 1.5;
+	}
+
+	.outcome {
+		display: block;
+		margin-top: 0.375rem;
+		font-style: italic;
+		color: var(--accent-regular);
+		font-size: 0.8125rem;
+	}
+
+	.col-links {
+		width: 10rem;
+	}
+
+	.project-links-cell {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		align-items: flex-start;
+	}
+
+	.btn-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.25rem 0.625rem;
+		border-radius: 999rem;
+		font-size: var(--text-xs, 0.75rem);
+		font-weight: 500;
+		text-decoration: none;
+		background: var(--accent-regular);
+		color: var(--accent-text-over);
+		white-space: nowrap;
+		transition: opacity var(--theme-transition);
+	}
+
+	.btn-link:hover {
+		opacity: 0.85;
+	}
+
+	.btn-link--ghost {
+		background: transparent;
+		border: 1px solid var(--gray-700);
+		color: var(--gray-300);
+	}
+
+	.btn-link--ghost:hover {
+		border-color: var(--accent-dark);
+		color: var(--gray-100);
+		opacity: 1;
+	}
+
+	@media (max-width: 49.9em) {
+		.project-desc {
+			display: none;
+		}
+		.project-name {
+			width: auto;
+		}
+		.col-links {
+			width: auto;
+		}
+		.project-links-cell {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
 	}
 
 	@media (min-width: 50em) {
-		.group-header h2 {
+		.group-title {
 			font-size: var(--text-3xl);
 		}
 	}

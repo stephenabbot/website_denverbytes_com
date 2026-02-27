@@ -1,6 +1,5 @@
 ---
 import { type CollectionEntry, getCollection, render } from 'astro:content';
-
 import ContactCTA from '../../components/ContactCTA.astro';
 import Hero from '../../components/Hero.astro';
 import Icon from '../../components/Icon.astro';
@@ -11,9 +10,6 @@ interface Props {
 	entry: CollectionEntry<'work'>;
 }
 
-// This is a dynamic route that generates a page for every Markdown file in src/content/
-// Read more about dynamic routes and this `getStaticPaths` function in the Astro docs:
-// https://docs.astro.build/en/core-concepts/routing/#dynamic-routes
 export async function getStaticPaths() {
 	const work = await getCollection('work');
 	return work.map((entry) => ({
@@ -24,6 +20,22 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+const publishedDate = entry.data.publishDate.toLocaleDateString('en-US', {
+	year: 'numeric',
+	month: 'long',
+});
+
+const allProjects = await getCollection('work');
+const relatedProjects = allProjects
+	.filter((p) => p.id !== entry.id)
+	.map((p) => ({
+		...p,
+		sharedTags: p.data.tags.filter((t) => entry.data.tags.includes(t)).length,
+	}))
+	.filter((p) => p.sharedTags > 0)
+	.sort((a, b) => b.sharedTags - a.sharedTags)
+	.slice(0, 3);
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description}>
@@ -33,24 +45,58 @@ const { Content } = await render(entry);
 				<div class="wrapper stack gap-2">
 					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Work</a>
 					<Hero title={entry.data.title} align="start">
-						<div class="details">
-							<div class="tags">
-								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
-							</div>
-							<p class="description">{entry.data.description}</p>
-						</div>
+						<p class="description">{entry.data.description}</p>
 					</Hero>
 				</div>
 			</header>
 			<main class="wrapper">
-				<div class="stack gap-10 content">
-					{entry.data.img && <img src={entry.data.img} alt={entry.data.img_alt || ''} />}
-					<div class="content">
+				<div class="project-layout">
+					<article class="content">
 						<Content />
-					</div>
+					</article>
+					<aside class="sidebar">
+						{entry.data.repo && (
+							<div class="sidebar-section">
+								<h3 class="sidebar-label">Repository</h3>
+								<a href={entry.data.repo} target="_blank" rel="noopener" class="sidebar-repo-link">
+									<Icon icon="github-logo" size="1em" /> View on GitHub
+								</a>
+							</div>
+						)}
+						<div class="sidebar-section">
+							<h3 class="sidebar-label sr-only">Tags</h3>
+							<div class="sidebar-tags">
+								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
+							</div>
+						</div>
+						<div class="sidebar-section">
+							<h3 class="sidebar-label">Published</h3>
+							<time class="sidebar-value">{publishedDate}</time>
+						</div>
+						<div class="sidebar-section sidebar-section--links">
+							<a href="/work/" class="sidebar-back">
+								<Icon icon="arrow-left" size="0.9em" /> All Projects
+							</a>
+						</div>
+					</aside>
 				</div>
 			</main>
 		</div>
+		{relatedProjects.length > 0 && (
+			<div class="wrapper">
+				<section class="related-projects">
+					<h3 class="related-heading">Related Projects</h3>
+					<div class="related-grid">
+						{relatedProjects.map((p) => (
+							<a href={`/work/${p.id}`} class="related-card">
+								<span class="related-title">{p.data.title}</span>
+								<p class="related-desc">{p.data.description}</p>
+							</a>
+						))}
+					</div>
+				</section>
+			</div>
+		)}
 		<ContactCTA />
 	</div>
 </BaseLayout>
@@ -65,41 +111,25 @@ const { Content } = await render(entry);
 		display: none;
 	}
 
-	.details {
-		display: flex;
-		flex-direction: column;
-		padding: 0.5rem;
-		gap: 1.5rem;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.tags {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
 	.description {
 		font-size: var(--text-lg);
-		max-width: min(54ch, calc(100vw - 2rem));
-		word-break: break-word;
-		overflow-wrap: break-word;
-		hyphens: auto;
+		max-width: 54ch;
+		color: var(--gray-300);
 	}
 
+	/* ── Two-column layout ── */
+	.project-layout {
+		display: grid;
+		gap: 3rem;
+	}
+
+	/* ── Content (prose) column ── */
 	.content {
-		max-width: min(65ch, calc(100vw - 2rem));
-		margin-inline: auto;
-		padding-inline: 1rem;
-		word-break: break-word;
-		overflow-wrap: break-word;
-		hyphens: auto;
+		min-width: 0;
 	}
 
 	.content > :global(* + *) {
-		margin-top: 1rem;
+		margin-top: 1.5rem;
 	}
 
 	.content :global(h1),
@@ -110,11 +140,17 @@ const { Content } = await render(entry);
 		margin: 1.5rem 0;
 	}
 
+	.content :global(h2) {
+		font-size: clamp(1.25rem, 3vw, var(--text-2xl));
+	}
+
 	.content :global(img) {
 		border-radius: 1.5rem;
 		box-shadow: var(--shadow-sm);
 		background: var(--gradient-subtle);
 		border: 1px solid var(--gray-800);
+		width: 100%;
+		height: auto;
 	}
 
 	.content :global(blockquote) {
@@ -127,33 +163,250 @@ const { Content } = await render(entry);
 		color: var(--gray-0);
 	}
 
-	.back-link,
 	.content :global(a) {
 		text-decoration: 1px solid underline transparent;
 		text-underline-offset: 0.25em;
 		transition: text-decoration-color var(--theme-transition);
 	}
 
-	.back-link:hover,
-	.back-link:focus,
 	.content :global(a:hover),
 	.content :global(a:focus) {
 		text-decoration-color: currentColor;
 	}
 
+	.content :global(table) {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: var(--text-sm);
+		margin: 1.5rem 0;
+	}
+
+	.content :global(th) {
+		text-align: left;
+		padding: 0.5rem 0.75rem;
+		color: var(--gray-400);
+		border-bottom: 1px solid var(--gray-700);
+		font-weight: 500;
+	}
+
+	.content :global(td) {
+		padding: 0.5rem 0.75rem;
+		color: var(--gray-300);
+		border-bottom: 1px solid var(--gray-800);
+		vertical-align: top;
+	}
+
+	.content :global(tr:last-child td) {
+		border-bottom: none;
+	}
+
+	.content :global(details) {
+		margin-top: 2rem;
+		border: 1px solid var(--gray-800);
+		border-radius: 0.75rem;
+		padding: 1rem 1.25rem;
+		background: var(--gradient-subtle);
+	}
+
+	.content :global(details summary) {
+		cursor: pointer;
+		font-weight: 500;
+		color: var(--gray-300);
+		list-style: none;
+		padding: 0.125rem 0;
+	}
+
+	.content :global(details summary::-webkit-details-marker) {
+		display: none;
+	}
+
+	.content :global(details summary::before) {
+		content: '▶ ';
+		font-size: 0.7em;
+		color: var(--accent-regular);
+	}
+
+	.content :global(details[open] summary::before) {
+		content: '▼ ';
+	}
+
+	.content :global(details > * + *) {
+		margin-top: 0.5rem;
+	}
+
+	/* ── Sidebar ── */
+	.sidebar {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 1.5rem 2.5rem;
+		padding: 1.25rem;
+		background: var(--gradient-subtle);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		align-self: start;
+	}
+
+	.sidebar-section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.sidebar-label {
+		font-size: var(--text-xs, 0.75rem);
+		color: var(--gray-500);
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		font-weight: 500;
+		margin: 0;
+	}
+
+	.sidebar-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.375rem;
+	}
+
+	.sidebar-value {
+		font-size: var(--text-sm);
+		color: var(--gray-300);
+	}
+
+	.sr-only {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border-width: 0;
+	}
+
+	.sidebar-repo-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+		color: var(--accent-regular);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		transition: color var(--theme-transition);
+	}
+
+	.sidebar-repo-link:hover {
+		color: var(--accent-dark);
+	}
+
+	.sidebar-back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		color: var(--accent-regular);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		transition: color var(--theme-transition);
+	}
+
+	.sidebar-back:hover {
+		color: var(--accent-dark);
+	}
+
+	.back-link,
+	.back-link:hover,
+	.back-link:focus {
+		text-decoration: 1px solid underline transparent;
+		text-underline-offset: 0.25em;
+		transition: text-decoration-color var(--theme-transition);
+	}
+
+	.back-link:hover,
+	.back-link:focus {
+		text-decoration-color: currentColor;
+	}
+
+	/* ── Related Projects ── */
+	.related-projects {
+		padding-top: 2rem;
+		border-top: 1px solid var(--gray-800);
+	}
+
+	.related-heading {
+		font-size: var(--text-xl);
+		color: var(--gray-200);
+		margin-bottom: 1.5rem;
+	}
+
+	.related-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: 1fr;
+	}
+
+	.related-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--gray-800);
+		border-radius: 0.75rem;
+		text-decoration: none;
+		background: var(--gradient-subtle);
+		transition: border-color var(--theme-transition), box-shadow var(--theme-transition);
+	}
+
+	.related-card:hover {
+		border-color: var(--accent-dark);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.related-title {
+		font-weight: 500;
+		color: var(--gray-100);
+		font-size: var(--text-base);
+	}
+
+	.related-desc {
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+		line-height: 1.5;
+		margin: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* ── Desktop: two-column ── */
 	@media (min-width: 50em) {
 		.back-link {
 			display: block;
 			align-self: flex-start;
 		}
 
-		.details {
-			flex-direction: row;
-			gap: 2.5rem;
+		.project-layout {
+			grid-template-columns: 1fr 18rem;
+			gap: 4rem;
+			align-items: start;
+		}
+
+		.sidebar {
+			flex-direction: column;
+			flex-wrap: nowrap;
+			gap: 1.5rem;
+			position: sticky;
+			top: 2rem;
 		}
 
 		.content :global(blockquote) {
 			font-size: var(--text-2xl);
+		}
+
+		.related-grid {
+			grid-template-columns: repeat(3, 1fr);
 		}
 	}
 </style>

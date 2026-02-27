@@ -1,0 +1,257 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+
+// Get resume content
+const resumeEntries = await getCollection("resume");
+const resume = resumeEntries[0]; // Should only be one resume file
+const { Content } = await render(resume);
+---
+
+<BaseLayout
+	title="Resume - Stephen Abbot"
+	description="Resume of Stephen Abbot, Senior Site Reliability Engineer specializing in AWS infrastructure, automation, and observability platforms."
+>
+	<div class="stack gap-20">
+		<div class="wrapper stack gap-8">
+			<header class="hero">
+				<div class="stack gap-2">
+					<h1 class="title">{resume.data.name}</h1>
+					<p class="tagline">{resume.data.title}</p>
+				</div>
+				
+				<!-- Download Resume - Moved to top -->
+				<div class="download-section">
+					<a href="/Stephen Abbot Resume January.pdf" download class="download-link">
+						<Icon icon="download" size="1.2em" />
+						Download Resume (PDF)
+					</a>
+					<a href="/stephen-abbot-resume.docx" download class="download-link download-link--secondary">
+						<Icon icon="download" size="1.2em" />
+						Download Resume (DOCX)
+					</a>
+				</div>
+			</header>
+
+			<main class="wrapper">
+				<div class="stack gap-8">
+					<!-- Contact Information -->
+					<section class="section with-background">
+						<header class="section-header stack gap-2 lg:gap-4">
+							<h2>Contact</h2>
+						</header>
+						<div class="content">
+							<div class="contact-grid">
+								<div class="contact-item">
+									<Icon icon="paper-plane-tilt" size="1.2em" />
+									<a href="mailto:stephen.abbot@denverbytes.com">
+										stephen.abbot@denverbytes.com
+									</a>
+								</div>
+								<div class="contact-item">
+									<Icon icon="map-pin" size="1.2em" />
+									<span>{resume.data.location}</span>
+								</div>
+								<div class="contact-item">
+									<Icon icon="external-link" size="1.2em" />
+									<a href={resume.data.website} target="_blank" rel="noopener noreferrer">
+										{resume.data.website}
+									</a>
+								</div>
+								<div class="contact-item">
+									<Icon icon="github-logo" size="1.2em" />
+									<a href={resume.data.github} target="_blank" rel="noopener noreferrer">
+										GitHub Profile
+									</a>
+								</div>
+								<div class="contact-item">
+									<Icon icon="linkedin-logo" size="1.2em" />
+									<a href={resume.data.linkedin} target="_blank" rel="noopener noreferrer">
+										LinkedIn Profile
+									</a>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Certifications -->
+					<section class="section with-background">
+						<header class="section-header stack gap-2 lg:gap-4">
+							<h2>Certifications</h2>
+						</header>
+						<div class="content">
+							<ul class="certifications-list">
+								{resume.data.certifications.map((cert) => (
+									<li>{cert}</li>
+								))}
+							</ul>
+						</div>
+					</section>
+
+					<!-- Summary -->
+					<section class="section with-background">
+						<header class="section-header stack gap-2 lg:gap-4">
+							<h2>Professional Summary</h2>
+						</header>
+						<div class="content">
+							<p>{resume.data.summary}</p>
+						</div>
+					</section>
+
+					<!-- Resume Content -->
+					<section class="section resume-content-section with-background">
+						<div class="content resume-content">
+							<Content />
+						</div>
+					</section>
+
+					<!-- Download Resume -->
+					<!-- Removed - moved to top of page -->
+				</div>
+			</main>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 2rem 0;
+	}
+
+	.download-section {
+		margin-top: 1.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		justify-content: center;
+	}
+
+	.title {
+		font-size: var(--text-3xl);
+		color: var(--gray-0);
+	}
+
+	.tagline {
+		font-size: var(--text-lg);
+		color: var(--gray-300);
+	}
+
+	.section {
+		display: grid;
+		gap: 2rem;
+	}
+
+	.section-header h2 {
+		font-size: var(--text-xl);
+		color: #c084fc;
+	}
+
+	.contact-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
+
+	.contact-item {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--gray-300);
+	}
+
+	.contact-item a {
+		color: #c084fc;
+		text-decoration: none;
+	}
+
+	.contact-item a:hover {
+		text-decoration: underline;
+	}
+
+	.certifications-list {
+		list-style: none;
+		padding: 0;
+		display: grid;
+		gap: 0.5rem;
+	}
+
+	.certifications-list li {
+		padding: 0.5rem 1rem;
+		background: var(--gray-999_40);
+		border-radius: 0.5rem;
+		color: var(--gray-200);
+	}
+
+	.resume-content {
+		color: var(--gray-200);
+		line-height: 1.6;
+	}
+
+	.resume-content :global(h2) {
+		color: var(--gray-0);
+		font-size: var(--text-xl);
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
+
+	.resume-content :global(h3) {
+		color: #c084fc;
+		font-size: var(--text-lg);
+		margin-top: 1.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.resume-content :global(ul) {
+		margin: 1rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.resume-content :global(li) {
+		margin-bottom: 0.5rem;
+	}
+
+	.resume-content :global(strong) {
+		color: var(--gray-0);
+	}
+
+	.download-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 1rem 2rem;
+		background: #c084fc;
+		color: var(--gray-0);
+		text-decoration: none;
+		border-radius: 0.5rem;
+		font-weight: 500;
+		transition: background-color 0.2s;
+	}
+
+	.download-link:hover {
+		background: #a855f7;
+	}
+
+	.download-link--secondary {
+		background: transparent;
+		border: 2px solid var(--gray-700);
+		color: var(--gray-300);
+	}
+
+	.download-link--secondary:hover {
+		background: var(--gray-800);
+		border-color: var(--gray-600);
+	}
+
+	@media (min-width: 50em) {
+		.section:not(.resume-content-section) {
+			grid-template-columns: 1fr 3fr;
+			gap: 3.5rem;
+		}
+
+		.section-header {
+			text-align: right;
+		}
+	}
+</style>

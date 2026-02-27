@@ -23,7 +23,10 @@ print_status() { echo -e "${BLUE}ℹ${NC} $1"; }
 echo "📋 LISTING DEPLOYED RESOURCES"
 echo ""
 
-# Extract project name and domain
+# Load configuration
+source "${SCRIPT_DIR}/../config.env"
+
+# Extract project name (keep dynamic for accurate deployment role resolution)
 PROJECT_NAME=$(git remote get-url origin 2>/dev/null | sed -E 's|.*github\.com[:/][^/]+/([^/.]+)(\.git)?$|\1|' || echo "")
 
 if [ -z "$PROJECT_NAME" ]; then
@@ -31,16 +34,13 @@ if [ -z "$PROJECT_NAME" ]; then
     exit 1
 fi
 
-DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
-DOMAIN_NAME="${DOMAIN_STUB}.com"
-
 print_status "Project: $PROJECT_NAME"
 print_status "Target domain: $DOMAIN_NAME"
 echo ""
 
 # Check deployment role
 print_status "Deployment Role:"
-ROLE_ARN=$(aws ssm get-parameter --region us-east-1 --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
+ROLE_ARN=$(aws ssm get-parameter --region "$AWS_REGION" --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
 
 if [ -n "$ROLE_ARN" ]; then
     echo -e "${GREEN}✓${NC} Role ARN: $ROLE_ARN"
@@ -54,7 +54,7 @@ echo ""
 print_status "Infrastructure Parameters:"
 
 # Get all parameters for the domain
-PARAMS=$(aws ssm get-parameters-by-path --region us-east-1 --path "/static-website/infrastructure/${DOMAIN_NAME}/" --query 'Parameters[*].[Name,Value]' --output text 2>/dev/null || echo "")
+PARAMS=$(aws ssm get-parameters-by-path --region "$AWS_REGION" --path "/static-website/infrastructure/${DOMAIN_NAME}/" --query 'Parameters[*].[Name,Value]' --output text 2>/dev/null || echo "")
 
 if [ -z "$PARAMS" ]; then
     echo -e "${RED}✗${NC} No infrastructure found for domain: $DOMAIN_NAME"
@@ -189,6 +189,11 @@ elif [ "$OBJECT_COUNT" -eq 1 ]; then
 else
     echo -e "${RED}✗${NC} Website has no content"
 fi
+
+# Check DNS records
+echo ""
+print_status "DNS Configuration:"
+./scripts/manage-dns.sh status
 
 if [ "$DIST_STATUS" = "Deployed" ]; then
     echo -e "${GREEN}✓${NC} CloudFront distribution is ready"

@@ -23,16 +23,15 @@ print_status() { echo -e "${BLUE}ℹ${NC} $1"; }
 echo "🔍 VERIFYING PREREQUISITES"
 echo ""
 
-# Extract project name and domain from git remote URL
+# Load configuration
+source "${SCRIPT_DIR}/../config.env"
+
+# Extract project name (keep dynamic for accurate deployment role resolution)
 PROJECT_NAME=$(git remote get-url origin 2>/dev/null | sed -E 's|.*github\.com[:/][^/]+/([^/.]+)(\.git)?$|\1|' || echo "")
 if [ -z "$PROJECT_NAME" ]; then
     echo -e "${RED}✗${NC} Could not determine project name from git remote"
     exit 1
 fi
-
-# Extract domain from project name: website_denverbytes_com -> denverbytes.com
-DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
-DOMAIN_NAME="${DOMAIN_STUB}.com"
 
 print_status "Project: $PROJECT_NAME"
 print_status "Target domain: $DOMAIN_NAME"
@@ -86,10 +85,52 @@ fi
 
 echo ""
 
+# Check GitHub variable configuration
+print_status "Checking GitHub variable configuration..."
+
+# Check if running in GitHub Actions
+if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+    if [ -n "${AWS_ACCOUNT_ID:-}" ]; then
+        echo -e "${GREEN}✓${NC} AWS_ACCOUNT_ID available in GitHub Actions"
+    else
+        echo -e "${RED}✗${NC} AWS_ACCOUNT_ID variable not configured in GitHub repository"
+        echo ""
+        echo "🚨 BOOTSTRAP REQUIRED 🚨"
+        echo ""
+        echo "This GitHub Actions workflow cannot proceed because the AWS_ACCOUNT_ID"
+        echo "repository variable has not been configured."
+        echo ""
+        echo "REQUIRED ACTION:"
+        echo "  Someone with repository admin permissions must run the bootstrap"
+        echo "  script locally to configure the required GitHub repository variables:"
+        echo ""
+        echo "    git clone <this-repository>"
+        echo "    cd <repository-directory>"
+        echo "    ./scripts/bootstrap.sh"
+        echo ""
+        echo "This one-time setup configures the AWS_ACCOUNT_ID variable that"
+        echo "GitHub Actions workflows need to construct deployment role ARNs."
+        exit 1
+    fi
+elif command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
+    if gh variable list | grep -q "AWS_ACCOUNT_ID"; then
+        echo -e "${GREEN}✓${NC} AWS_ACCOUNT_ID GitHub variable configured"
+    else
+        echo -e "${RED}✗${NC} AWS_ACCOUNT_ID GitHub variable not set"
+        echo "  Run './scripts/bootstrap.sh' to configure"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠${NC} GitHub CLI not available or not authenticated"
+    echo "  Cannot verify GitHub variable configuration"
+fi
+
+echo ""
+
 # Check deployment role
 print_status "Checking deployment role..."
 
-ROLE_ARN=$(aws ssm get-parameter --region us-east-1 --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
+ROLE_ARN=$(aws ssm get-parameter --region "$AWS_REGION" --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
 
 if [ -n "$ROLE_ARN" ]; then
     echo -e "${GREEN}✓${NC} Deployment role found: $ROLE_ARN"
@@ -109,7 +150,7 @@ echo ""
 # Check infrastructure parameters
 print_status "Checking infrastructure parameters..."
 
-BUCKET_NAME=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text 2>/dev/null || echo "")
+BUCKET_NAME=$(aws ssm get-parameter --region "$AWS_REGION" --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text 2>/dev/null || echo "")
 
 if [ -z "$BUCKET_NAME" ]; then
     echo -e "${RED}✗${NC} Infrastructure not found for domain: $DOMAIN_NAME"
@@ -128,7 +169,7 @@ else
 fi
 
 # Check CloudFront distribution
-DISTRIBUTION_ID=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text 2>/dev/null || echo "")
+DISTRIBUTION_ID=$(aws ssm get-parameter --region "$AWS_REGION" --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text 2>/dev/null || echo "")
 
 if [ -n "$DISTRIBUTION_ID" ]; then
     echo -e "${GREEN}✓${NC} CloudFront distribution: $DISTRIBUTION_ID"

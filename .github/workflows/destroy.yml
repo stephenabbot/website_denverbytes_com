@@ -1,0 +1,103 @@
+name: Destroy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "destroy" to confirm destruction'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  destroy:
+    name: Destroy Website Content
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "destroy" ]; then
+            echo "Destruction not confirmed. Please type 'destroy' to confirm."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/gharole-website_denverbytes_com-prd
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: website-destroy-${{ github.run_id }}
+          role-duration-seconds: 3600
+
+      - name: Verify AWS identity
+        run: |
+          echo "Verifying AWS credentials..."
+          aws sts get-caller-identity
+          echo "AWS credentials configured successfully"
+
+      - name: Get infrastructure parameters
+        id: infra
+        run: |
+          PROJECT_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
+          DOMAIN_NAME="${DOMAIN_STUB}.com"
+          
+          BUCKET_NAME=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text 2>/dev/null || echo "")
+          DISTRIBUTION_ID=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text 2>/dev/null || echo "")
+          
+          echo "domain_name=$DOMAIN_NAME" >> $GITHUB_OUTPUT
+          echo "bucket_name=$BUCKET_NAME" >> $GITHUB_OUTPUT
+          echo "distribution_id=$DISTRIBUTION_ID" >> $GITHUB_OUTPUT
+          
+          echo "Infrastructure parameters:"
+          echo "  Domain: $DOMAIN_NAME"
+          echo "  S3 Bucket: $BUCKET_NAME"
+          echo "  CloudFront Distribution: $DISTRIBUTION_ID"
+
+      - name: Empty S3 bucket
+        run: |
+          if [ -n "${{ steps.infra.outputs.bucket_name }}" ]; then
+            echo "Emptying S3 bucket: ${{ steps.infra.outputs.bucket_name }}"
+            
+            # Check if bucket exists
+            if aws s3 ls "s3://${{ steps.infra.outputs.bucket_name }}" &>/dev/null; then
+              # Delete all objects and versions
+              aws s3 rm "s3://${{ steps.infra.outputs.bucket_name }}" --recursive
+              
+              # Delete any versioned objects if versioning is enabled
+              aws s3api list-object-versions --bucket "${{ steps.infra.outputs.bucket_name }}" --query 'Versions[].{Key:Key,VersionId:VersionId}' --output text | while read key version; do
+                if [ -n "$key" ] && [ -n "$version" ]; then
+                  aws s3api delete-object --bucket "${{ steps.infra.outputs.bucket_name }}" --key "$key" --version-id "$version"
+                fi
+              done
+              
+              # Delete any delete markers
+              aws s3api list-object-versions --bucket "${{ steps.infra.outputs.bucket_name }}" --query 'DeleteMarkers[].{Key:Key,VersionId:VersionId}' --output text | while read key version; do
+                if [ -n "$key" ] && [ -n "$version" ]; then
+                  aws s3api delete-object --bucket "${{ steps.infra.outputs.bucket_name }}" --key "$key" --version-id "$version"
+                fi
+              done
+              
+              echo "✓ S3 bucket emptied successfully"
+            else
+              echo "S3 bucket does not exist or is not accessible"
+            fi
+          else
+            echo "No S3 bucket found to empty"
+          fi
+
+      - name: Verify destruction
+        run: |
+          echo "🗑️ Website content destruction completed"
+          echo "Note: Infrastructure (S3 bucket, CloudFront distribution) is managed by the website-infrastructure project"
+          echo "To fully destroy infrastructure, run the destroy workflow in the website-infrastructure project"

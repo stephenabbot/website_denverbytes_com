@@ -1,50 +1,54 @@
 ---
 title: Foundation Terraform Bootstrap
-publishDate: 2025-12-01 00:00:00
+publishDate: 2025-12-07 00:00:00
 img: /assets/stock-1.jpg
 img_alt: CloudFormation foundation infrastructure with S3, DynamoDB, and OIDC components
 description: |
-  CloudFormation foundation for Terraform backend infrastructure and OIDC authentication.
-  Creates shared S3 state storage, DynamoDB locking, and GitHub Actions OIDC provider.
+  A minimal bootstrap tool that creates the S3 and DynamoDB backends needed for Terraform state,
+  with sensible defaults and guardrails. Teams can adopt Terraform with a secure, versioned backend
+  in hours instead of days.
 tags:
   - CloudFormation
   - AWS
   - Infrastructure
   - OIDC
+repo: https://github.com/stephenabbot/foundation-terraform-bootstrap
 ---
 
-## The Foundation Problem
+## The Problem
 
-Every Terraform or OpenTofu project needs three foundational components: remote state storage, state locking, and CI/CD authentication. Creating these manually for each project leads to inconsistency, security risks, and operational overhead.
+Every Terraform project needs remote state storage, state locking, and CI/CD authentication before it can deploy anything. Creating these manually per project is inconsistent and error-prone — and you cannot use Terraform to create Terraform's own backend, creating a circular dependency.
 
-This project solves the circular dependency problem - you can't use Terraform to create Terraform's own backend resources. By using CloudFormation for the foundation, we establish the infrastructure that all subsequent Terraform projects depend on.
+## The Approach
 
-## What This Project Delivers
+CloudFormation manages the bootstrap resources (S3 bucket, DynamoDB lock table, OIDC provider) because it has no dependency on Terraform. SSM Parameter Store publishes the resulting resource identifiers at predictable paths so consuming projects can discover them without hardcoded values.
 
-### Core Infrastructure
-- **S3 bucket** for Terraform state storage with versioning and encryption
-- **DynamoDB table** for state locking with point-in-time recovery
-- **OIDC provider** for GitHub Actions authentication without long-lived credentials
-- **IAM roles** for secure deployment workflows
+## The Outcome
 
-### Service Discovery
-- **SSM Parameter Store** integration publishes backend configuration at predictable paths
-- **Automatic discovery** enables consuming projects to find resources without hardcoding
-- **Consistent naming** and tagging patterns across all deployed resources
+A reusable foundation that any subsequent Terraform project can consume immediately. Teams get consistent state management, state locking, and keyless GitHub Actions authentication from a single deployment with no manual setup.
 
-### AWS Well-Architected Alignment
-This foundation demonstrates all six pillars of the AWS Well-Architected Framework:
-- **Security**: OIDC authentication, encryption, least privilege access
-- **Reliability**: Multi-region support, versioning, point-in-time recovery
-- **Performance**: S3 Intelligent Tiering, DynamoDB on-demand billing
-- **Cost Optimization**: Automated lifecycle policies, shared infrastructure
-- **Operational Excellence**: Infrastructure as code, comprehensive documentation
-- **Sustainability**: Serverless managed services, automated resource management
+## Stack
 
-## The Strategic Value
-
-This isn't just infrastructure - it's the **foundation for scalable DevOps practices**. Every subsequent project builds on this base, creating a consistent, secure, and cost-optimized deployment pipeline.
-
-By establishing this foundation first, teams can focus on building applications rather than wrestling with backend configuration and credential management. It's the difference between starting from scratch every time versus building on proven, reusable patterns.
+| Technology | Purpose |
+|------------|---------|
+| AWS CloudFormation | Bootstrap orchestration (no Terraform dependency) |
+| AWS S3 | Terraform remote state storage with versioning |
+| AWS DynamoDB | State locking with point-in-time recovery |
+| AWS IAM / OIDC | Keyless GitHub Actions authentication |
+| AWS SSM Parameter Store | Resource discovery for consuming projects |
 
 **Repository**: [foundation-terraform-bootstrap](https://github.com/stephenabbot/foundation-terraform-bootstrap)
+
+---
+
+<details>
+<summary>AWS Well-Architected Alignment</summary>
+
+- **Operational Excellence**: Infrastructure as code; consistent naming and tagging patterns
+- **Security**: OIDC eliminates long-lived credentials; least-privilege IAM roles; encryption at rest
+- **Reliability**: S3 versioning; DynamoDB point-in-time recovery; multi-region support
+- **Performance Efficiency**: S3 Intelligent Tiering; DynamoDB on-demand billing
+- **Cost Optimization**: Shared infrastructure across projects; automated lifecycle policies
+- **Sustainability**: Serverless managed services; no idle compute
+
+</details>

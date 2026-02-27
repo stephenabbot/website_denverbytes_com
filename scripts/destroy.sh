@@ -28,18 +28,14 @@ echo ""
 
 echo ""
 
-# Extract project name and domain
-PROJECT_NAME=$(git remote get-url origin 2>/dev/null | sed -E 's|.*github\.com[:/][^/]+/([^/.]+)(\.git)?$|\1|' || echo "")
-DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
-DOMAIN_NAME="${DOMAIN_STUB}.com"
+# Load configuration
+source "${SCRIPT_DIR}/../config.env"
 
-# Extract project name and domain
+# Extract project name (keep dynamic for accurate deployment role resolution)
 PROJECT_NAME=$(git remote get-url origin 2>/dev/null | sed -E 's|.*github\.com[:/][^/]+/([^/.]+)(\.git)?$|\1|' || echo "")
-DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
-DOMAIN_NAME="${DOMAIN_STUB}.com"
 
 # Check for deployment role and assume if available
-ROLE_ARN=$(aws ssm get-parameter --region us-east-1 --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
+ROLE_ARN=$(aws ssm get-parameter --region "$AWS_REGION" --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
 
 if [ -n "$ROLE_ARN" ]; then
     print_status "Assuming deployment role: $ROLE_ARN"
@@ -59,8 +55,8 @@ fi
 echo ""
 
 # Get infrastructure parameters
-BUCKET_NAME=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text)
-DISTRIBUTION_ID=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text)
+BUCKET_NAME=$(aws ssm get-parameter --region "$AWS_REGION" --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text)
+DISTRIBUTION_ID=$(aws ssm get-parameter --region "$AWS_REGION" --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text)
 
 echo -e "${GREEN}✓${NC} S3 bucket: $BUCKET_NAME"
 echo -e "${GREEN}✓${NC} CloudFront distribution: $DISTRIBUTION_ID"
@@ -199,3 +195,13 @@ echo -e "${GREEN}🎉 DESTRUCTION COMPLETED SUCCESSFULLY!${NC}"
 print_status "Website URL: https://$DOMAIN_NAME"
 print_status "The domain now shows the original coming soon page"
 print_status "CloudFront may take a few minutes to serve the updated content"
+
+# Optionally remove Google Search Console DNS record
+echo ""
+print_status "Checking Google Search Console DNS record..."
+if ./scripts/manage-dns.sh verify &>/dev/null; then
+    echo -e "${YELLOW}⚠${NC} Google Search Console TXT record still exists"
+    echo "  Run './scripts/manage-dns.sh remove' to remove it if no longer needed"
+else
+    echo -e "${GREEN}✓${NC} No Google Search Console TXT record found"
+fi

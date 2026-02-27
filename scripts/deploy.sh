@@ -24,22 +24,61 @@ echo "🚀 DEPLOYING WEBSITE CONTENT"
 echo ""
 
 # Verify prerequisites
-./scripts/verify-prerequisites.sh || exit 1
+echo "Step 1: Verifying prerequisites..."
+if ./scripts/verify-prerequisites.sh; then
+  echo "✓ All prerequisites satisfied"
+else
+  # Check if running in GitHub Actions
+  if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+    echo ""
+    echo "❌ Prerequisites failed in GitHub Actions environment"
+    echo "   Cannot run bootstrap script in GitHub Actions"
+    echo "   Bootstrap must be run locally by someone with repository admin permissions"
+    exit 1
+  fi
+  
+  echo ""
+  echo "Checking if bootstrap is needed..."
+  
+  # Check if the failure is due to missing GitHub variable or dependencies
+  if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
+    if ! gh variable list | grep -q "AWS_ACCOUNT_ID"; then
+      echo "Running bootstrap to configure GitHub variables..."
+      ./scripts/bootstrap.sh || exit 1
+      
+      echo ""
+      echo "Re-verifying prerequisites after bootstrap..."
+      ./scripts/verify-prerequisites.sh || exit 1
+    else
+      # Check if node_modules exists, if not run bootstrap for dependencies
+      if [ ! -d "node_modules" ]; then
+        echo "Running bootstrap to install dependencies..."
+        ./scripts/bootstrap.sh || exit 1
+        
+        echo ""
+        echo "Re-verifying prerequisites after bootstrap..."
+        ./scripts/verify-prerequisites.sh || exit 1
+      else
+        echo "Prerequisites failed for reasons other than GitHub variables or dependencies"
+        exit 1
+      fi
+    fi
+  else
+    echo "Prerequisites failed and GitHub CLI not available for bootstrap"
+    exit 1
+  fi
+fi
 
 echo ""
 
-# Extract project name and domain
-PROJECT_NAME=$(git remote get-url origin 2>/dev/null | sed -E 's|.*github\.com[:/][^/]+/([^/.]+)(\.git)?$|\1|' || echo "")
-DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
-DOMAIN_NAME="${DOMAIN_STUB}.com"
+# Load configuration
+source "${PROJECT_ROOT}/config.env"
 
-# Extract project name and domain
+# Extract project name (keep dynamic for accurate deployment role resolution)
 PROJECT_NAME=$(git remote get-url origin 2>/dev/null | sed -E 's|.*github\.com[:/][^/]+/([^/.]+)(\.git)?$|\1|' || echo "")
-DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
-DOMAIN_NAME="${DOMAIN_STUB}.com"
 
 # Check for deployment role and assume if available
-ROLE_ARN=$(aws ssm get-parameter --region us-east-1 --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
+ROLE_ARN=$(aws ssm get-parameter --region "$AWS_REGION" --name "/deployment-roles/${PROJECT_NAME}/role-arn" --query Parameter.Value --output text 2>/dev/null || echo "")
 
 if [ -n "$ROLE_ARN" ]; then
     print_status "Attempting to assume deployment role: $ROLE_ARN"
@@ -59,8 +98,8 @@ fi
 echo ""
 
 # Get infrastructure parameters
-BUCKET_NAME=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text)
-DISTRIBUTION_ID=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text)
+BUCKET_NAME=$(aws ssm get-parameter --region "$AWS_REGION" --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text)
+DISTRIBUTION_ID=$(aws ssm get-parameter --region "$AWS_REGION" --name "/static-website/infrastructure/${DOMAIN_NAME}/cloudfront-distribution-id" --query Parameter.Value --output text)
 
 echo -e "${GREEN}✓${NC} S3 bucket: $BUCKET_NAME"
 echo -e "${GREEN}✓${NC} CloudFront distribution: $DISTRIBUTION_ID"
@@ -173,3 +212,13 @@ echo ""
 echo -e "${GREEN}🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!${NC}"
 print_status "Website URL: https://$DOMAIN_NAME"
 print_status "CloudFront may take a few minutes to serve updated content"
+
+# Verify Google Search Console DNS record
+echo ""
+print_status "Verifying Google Search Console DNS record..."
+if ./scripts/manage-dns.sh verify; then
+    echo -e "${GREEN}✓${NC} Google Search Console TXT record is configured"
+else
+    echo -e "${YELLOW}⚠${NC} Google Search Console TXT record not found or incorrect"
+    echo "  Run './scripts/manage-dns.sh add' to configure it"
+fi

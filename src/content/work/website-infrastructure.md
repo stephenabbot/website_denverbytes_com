@@ -1,67 +1,59 @@
 ---
 title: Website Infrastructure
-publishDate: 2025-11-01 00:00:00
+publishDate: 2025-12-05 00:00:00
 img: /assets/stock-3.jpg
 img_alt: Multi-domain static website hosting with S3, CloudFront, Route53, and ACM integration
 description: |
-  Multi-domain static website hosting infrastructure with automated SSL certificate 
-  management and global content distribution using AWS managed services.
+  A reusable AWS stack for static websites using S3, CloudFront, and Route53, tuned for
+  low cost and strong security by default. Production-ready hosting at roughly $3/month
+  with global distribution and no idle compute.
 tags:
   - OpenTofu
   - AWS
   - Multi-Domain
   - CDN
+repo: https://github.com/stephenabbot/website-infrastructure
 ---
 
-## Scalable Website Hosting Challenge
+## The Problem
 
-Static websites require coordination between multiple AWS services for secure, performant hosting. Manual configuration creates inconsistency, security gaps, and operational overhead when managing multiple domains.
+Static website hosting on AWS involves several interdependent resources that must be provisioned in the correct order: S3 bucket, CloudFront distribution, ACM certificate (in us-east-1 regardless of bucket region), and Route53 records. Doing this manually is error-prone and not repeatable across domains.
 
-This project provides automated infrastructure deployment for multiple static websites with complete SSL certificate management and global content distribution through AWS managed services.
+## The Approach
 
-## Architecture & Implementation
+Terraform modules manage all hosting resources with consistent structure. ACM certificate validation is automated via Route53 DNS records. The same module handles multiple domains (denverbytes.com and bittikens.com) with per-domain configuration.
 
-### Multi-Service Orchestration
+## The Outcome
 
-- **S3 buckets** with versioning, encryption, and public access blocks
-- **CloudFront distributions** with Origin Access Control and security configurations
-- **Route53 hosted zones** with A and AAAA records for IPv4/IPv6 support
-- **ACM certificates** with DNS validation through Route53
+Repeatable, version-controlled hosting infrastructure deployable to a new domain in minutes. S3 bucket versioning enables content rollback. CloudFront distribution provides global availability and HTTPS with no additional cost per request.
 
-### Advanced Features
+## Stack
 
-- **CloudFront Functions** for directory index handling and clean URLs
-- **Security headers** and compression enabled for optimal performance
-- **Cost optimization** through PriceClass_100 covering US and Europe regions
-- **Service discovery** via SSM Parameter Store for content projects
+| Technology | Purpose |
+|------------|---------|
+| Terraform | Infrastructure provisioning |
+| AWS S3 | Static content storage with versioning |
+| AWS CloudFront | CDN, HTTPS, custom domain |
+| AWS ACM | TLS certificate management |
+| AWS Route53 | DNS and certificate validation |
 
-### Current Deployments
-
-Successfully hosting multiple domains with consistent infrastructure patterns:
-
-- **stephenabbot.com** - Professional portfolio
-- **denverbites.com** - Local content platform
-- **denverbytes.com** - Technical blog (planned)
-- **denverbytes.com** - Development staging
-
-## The Scalability Story
-
-This isn't just website hosting - it's **infrastructure that scales with business needs**. The dynamic domain discovery through filesystem scanning means adding new domains requires minimal configuration changes.
-
-### Operational Excellence
-
-- **Automated deployment** through GitHub Actions with OIDC authentication
-- **Idempotent operations** supporting multiple executions without conflicts
-- **Comprehensive resource tagging** for cost allocation and operational visibility
-- **Loose coupling** between infrastructure and content projects
-
-### Performance & Security
-
-- **Global CDN distribution** reducing latency worldwide
-- **SSL/TLS certificates** with automatic DNS validation and renewal
-- **Origin Access Control** restricting S3 access to CloudFront only
-- **Error page handling** redirecting client errors to homepage
-
-This infrastructure demonstrates how to build **enterprise-grade hosting solutions** that are both cost-effective and operationally efficient, serving as a foundation for any organization's web presence.
+**Domains hosted:**
+- **bittikens.com** — This website
+- **denverbytes.com** — Production website
+- **denverbites.com** — Redirect alias to denverbytes.com
 
 **Repository**: [website-infrastructure](https://github.com/stephenabbot/website-infrastructure)
+
+---
+
+<details>
+<summary>AWS Well-Architected Alignment</summary>
+
+- **Operational Excellence**: Terraform-managed; repeatable across domains; automated certificate validation
+- **Security**: S3 public access blocked; CloudFront origin access control; HTTPS enforced
+- **Reliability**: S3 versioning for rollback; CloudFront multi-region edge; ACM auto-renewal
+- **Performance Efficiency**: Global CDN; no origin compute; efficient static delivery
+- **Cost Optimization**: Per-request pricing; no idle cost; shared infrastructure across domains
+- **Sustainability**: No servers; minimal resource footprint
+
+</details>

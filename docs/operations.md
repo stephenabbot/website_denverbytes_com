@@ -8,8 +8,8 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/stephenabbot/website_denverbytes_com.git
-cd website_denverbytes_com
+git clone https://github.com/stephenabbot/website-denverbytes-com.git
+cd website-denverbytes-com
 
 # Bootstrap project
 ./scripts/bootstrap.sh
@@ -47,11 +47,9 @@ The deployment script automatically:
 4. Invalidates CloudFront cache
 5. Verifies deployment success
 
-#### Automated Deployment
+#### GitHub Actions Deployment
 
-Deployments trigger automatically on:
-- Push to `main` branch
-- Manual workflow dispatch
+Deployments are triggered manually via GitHub Actions workflow dispatch. Once triggered, the pipeline handles build, S3 upload, CloudFront invalidation, and deployment verification automatically.
 
 ### Content Management
 

@@ -4,7 +4,7 @@
 
 This project creates a professional website using Astro and TypeScript that serves as the capstone demonstration of how foundation infrastructure projects integrate to deliver complete, production-ready solutions. The website showcases enterprise deployment patterns through live infrastructure while providing content management capabilities for blog posts, portfolio items, and professional experience.
 
-Repository: [website_denverbytes_com](https://github.com/stephenabbot/website_denverbytes_com)
+Repository: [website-denverbytes-com](https://github.com/stephenabbot/website-denverbytes-com)
 
 ## What Problem This Project Solves
 
@@ -112,7 +112,7 @@ This project demonstrates alignment with the AWS Well-Architected Framework thro
 | **AWS IAM** | Access control | OIDC-based authentication roles for secure GitHub Actions deployment without long-lived credentials |
 | **Node.js** | Build environment | JavaScript runtime for Astro build process and npm package management |
 | **npm** | Package management | Dependency management and build script execution for development and deployment |
-| **Git** | Version control | Source code management with automated deployment triggers and change tracking |
+| **Git** | Version control | Source code management and change tracking |
 | **Bash** | Automation scripting | Deployment scripts, prerequisite validation, and operational automation |
 | **Markdown** | Content authoring | Structured content creation with frontmatter for blog posts and portfolio items |
 | **CSS3** | Styling and design | Responsive design implementation with dark/light theme support and accessibility compliance |

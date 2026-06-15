@@ -119,4 +119,4 @@ This project demonstrates alignment with the AWS Well-Architected Framework thro
 
 ## Copyright
 
-© 2025 Stephen Abbot. All rights reserved.
+© 2025 Stephen Abbot - MIT License

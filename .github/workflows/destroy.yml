@@ -29,12 +29,12 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.3
 
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6.2.0
         with:
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/gharole-website_denverbytes_com-prd
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/gharole-website-denverbytes-com-prd
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: website-destroy-${{ github.run_id }}
           role-duration-seconds: 3600
@@ -49,7 +49,7 @@ jobs:
         id: infra
         run: |
           PROJECT_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
-          DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website_//' | sed 's/_com$//')
+          DOMAIN_STUB=$(echo "$PROJECT_NAME" | sed 's/^website-//' | sed 's/-com$//')
           DOMAIN_NAME="${DOMAIN_STUB}.com"
           
           BUCKET_NAME=$(aws ssm get-parameter --region us-east-1 --name "/static-website/infrastructure/${DOMAIN_NAME}/bucket-name" --query Parameter.Value --output text 2>/dev/null || echo "")

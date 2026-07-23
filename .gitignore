@@ -23,6 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# local command scratch (never commit)
-z_commands.sh
-z_results.txt
+# local command scratch (never commit) — anything starting with z_
+z_*

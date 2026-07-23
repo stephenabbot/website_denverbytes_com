@@ -47,6 +47,15 @@ const projects = featuredIds
 						<Pill><Icon icon="heart" size="1.33em" /> Mentor</Pill>
 					</div>
 					<a
+						href="https://github.com/stephenabbot"
+						target="_blank"
+						rel="noopener"
+						class="hero-github"
+					>
+						<Icon icon="github-logo" size="1.2em" />
+						View my code on GitHub
+					</a>
+					<a
 						href="mailto:stephen.abbot@denverbytes.com"
 						class="hero-email"
 					>
@@ -267,8 +276,14 @@ const projects = featuredIds
 						>2. Review experience</a
 					>
 					<a
+						href="https://github.com/stephenabbot"
+						target="_blank"
+						rel="noopener"
+						class="next-step">3. View code on GitHub</a
+					>
+					<a
 						href="mailto:stephen.abbot@denverbytes.com"
-						class="next-step">3. Get in touch</a
+						class="next-step">4. Get in touch</a
 					>
 				</div>
 			</nav>
@@ -653,6 +668,35 @@ const projects = featuredIds
 
 	.next-step:hover {
 		color: var(--accent-dark);
+	}
+
+	/* Hero GitHub CTA */
+	.hero-github {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		align-self: center;
+		margin-top: 0.5rem;
+		padding: 0.65rem 1.35rem;
+		background: var(--accent-regular);
+		color: var(--accent-text-over);
+		border-radius: 999rem;
+		font-weight: 500;
+		font-size: var(--text-sm);
+		text-decoration: none;
+		box-shadow: var(--shadow-sm);
+		transition: background-color var(--theme-transition);
+	}
+
+	.hero-github:hover,
+	.hero-github:focus {
+		background: var(--accent-dark);
+	}
+
+	@media (min-width: 50em) {
+		.hero-github {
+			align-self: flex-start;
+		}
 	}
 
 	/* Hero email link */

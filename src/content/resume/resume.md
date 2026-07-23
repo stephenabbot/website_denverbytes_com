@@ -23,7 +23,8 @@ Lead Cloud Enablement efforts to improve AWS governance, compliance, and observa
 - **Sensitive Data Identification**: Designed and implemented automated sensitive data detection in CloudWatch logs, leveraging keyword pattern matching and taxonomy-based classification; currently enhancing detection capabilities through iterative refinements
 - **Collaboration**: Collaborated closely with internal team members and external stakeholders to identify, define, and communicate key value propositions in cost optimization, security enhancement, and governance compliance, ensuring the AWS Resource Technical Debt Tool delivered relevant and actionable insights aligned with organizational objectives
 - **Design and build POC Automated Cloudwatch monitoring and alarming application**: Design bash application to manage AWS account alarming at scale
-- **Migrate Alarm PoC Automated Alarming Application to MVP**: Work with fellow team members to migrate PoC application to Terraform application supporting standard and custom alarming solutions for Customers to use to manage their AWS CloudWatch alarming needs
+- **Migrate automated Alarm PoC to Production with support**: Work with fellow team members to migrate PoC application to Terraform application supporting standard and custom alarming solutions for Customers to use to manage their AWS CloudWatch alarming needs
+- **Runbooks & Playbooks**: Create runbooks and playbooks as needed
 
 ### Sr. Site Reliability Engineer - Centene (Contractor via Zeektek)
 **Remote | Dec 2023 - Aug 2024**
@@ -39,7 +40,7 @@ Enabled consistent deployment of AWS Recommended and custom alarms to support re
 ### Site Reliability Engineer - Smartly
 **Remote | Mar 2022 - Nov 2023**
 
-Collaborated with AI-focused engineering teams as the AWS subject matter expert, guiding infrastructure modernization and observability improvements for reliability, performance, and scalability — aligning with AWS Well-Architected principles.
+Provided thought leadership and collaborated closely with AI-focused engineering teams as the AWS subject matter expert, guiding infrastructure modernization and observability improvements to meet enterprise-grade expectations for reliability, performance, and scalability — aligning with AWS Well-Architected principles.
 
 - **Containerization and Cloud Migration**: Architected and executed migration from Elastic Beanstalk to a container-based microservices architecture leveraging Lambda, ECS, EKS, reducing cost, improving system scalability, flexibility, and reducing operational maintenance effort
 - **Database Performance Optimization**: Identified critical PostgreSQL performance bottlenecks through detailed analysis, facilitating a strategic migration to Amazon Aurora for enhanced scalability and reliability
@@ -59,10 +60,11 @@ Led platform-wide observability and alerting initiatives for a growing pre-IPO H
 - **Post-Incident Analysis Support**: Supported Post-Incident reviews when sensitive data was exposed
 - **Notification Architecture**: Designed notification architecture using SNS and Lambda to evaluate and route alerts based on configurable rule sets, enabling team-specific incident management alerting and reporting
 - **Synthetic Monitoring Framework & SLA Enforcement**: Developed a lightweight BDD-based framework for automated functional and performance checks in production, executing every 10 minutes to validate critical user journeys. Captured backend service metrics during each run, enabling early detection of latency or degradation before customer impact. Defined synthetic SLAs, budgets and integrated alerting to proactively flag anomalies in backend components
+- **SLI Definition & Reliability Reporting**: Defined internal Service Level Indicators (SLIs) for platform services using Splunk for analysis, dashboarding, and alarming, giving engineering teams a shared, data-driven view of reliability and early-warning signals
 - **Logging Standards & Monitoring Integration**: Established structured logging standards and developed a shared logging library used across teams, standardizing log formats which improved cross-team troubleshooting and reduced incident resolution time
 - **Team Mentorship**: Mentored development teams on observability best practices, elevating logging quality and improving production system visibility
 
-### Lead QA Automation Engineer - Welltok
+### Site Reliability Engineer - Welltok
 **Denver, CO | Jun 2016 - Nov 2019**
 
 Designed and led operational intelligence initiatives for a healthcare SaaS platform, enabling data-driven incident response and performance optimization through unified observability and SLA instrumentation.
@@ -71,7 +73,7 @@ Designed and led operational intelligence initiatives for a healthcare SaaS plat
 - **Unified Dashboards**: Built unified Splunk dashboards providing a single-pane view for Engineering, Ops, and Business teams
 - **Integrated Observability System**: Developed integrated observability solution consolidating data from multiple sources (Splunk, CloudWatch, New Relic, Pingdom) using automated API polling and correlation
 - **Logging Optimization**: Established logging standards reducing ingestion costs and improving log signal-to-noise ratio while meeting Security, Engineering, and Support requirements
-- **SLI & SLA Instrumentation**: Created actionable Service Level Indicators (SLIs), alarm thresholds, and Splunk dashboards to track SLA compliance, budgets and operational health
+- **SLI, SLO & SLA creation**: Defined Service Level Indicators, Objectives and Agreement tracking, reporting and alarming for compliance, internal engineering teams and external customer SLA reporting support
 - **Synthetic SLA Verification**: Built a Java/Selenium and Splunk-based synthetic monitoring solution to validate SLA compliance, trigger alerts for budget violations, and proactively detect issues beyond availability alone
 - **Cross-Stack Visibility**: Enabled forensic analysis by correlating cross-stack telemetry, supporting engineering and SecOps investigations
 

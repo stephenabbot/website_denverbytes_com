@@ -23,25 +23,25 @@ const experiences = (await getCollection("experience")).sort(
 				align="start"
 			/>
 
-			<!-- Current Role & Signature Achievement -->
+			<!-- Most Recent Role & Signature Achievement -->
 			<section class="section">
-				<h2 class="section-title">Current Role</h2>
+				<h2 class="section-title">Most Recent Role</h2>
 				<div class="role-highlight">
 					<div class="role-header">
 						<h3>Sr. Site Reliability Engineer</h3>
 						<div class="company-info">
 							<span class="company">Centene Corporation</span>
 							<span class="location">Remote</span>
-							<span class="dates">Aug 2024 - Present</span>
+							<span class="dates">Aug 2024 - Aug 2026</span>
 						</div>
 					</div>
 					<div class="role-description">
 						<p>
-							Leading cloud enablement initiatives across <strong
+							Led cloud enablement initiatives across <strong
 								>hundreds of AWS accounts</strong
 							> for a Fortune 23 healthcare company serving 50,000+
-							employees and 200+ engineering teams. Building scalable
-							automation tools that improve governance while enabling
+							employees and 200+ engineering teams. Built scalable
+							automation tools that improved governance while enabling
 							team productivity.
 						</p>
 					</div>
@@ -67,8 +67,8 @@ const experiences = (await getCollection("experience")).sort(
 								<p>
 									Architected a comprehensive
 									Python/PostgreSQL platform that
-									automatically scans AWS accounts and
-									inventories all resources with operational
+									automatically scanned AWS accounts and
+									inventoried all resources with operational
 									characteristics, cost data, and compliance
 									findings. Used a single-table design with
 									dynamic views for sub-100ms query
@@ -116,20 +116,16 @@ const experiences = (await getCollection("experience")).sort(
 						<h4>Additional Contributions</h4>
 						<ul>
 							<li>
-								<strong>CloudWatch Alarming Automation:</strong> Reduced
-								monitoring setup from weeks to days with hierarchical
-								CSV-based configuration supporting team, environment,
-								and resource-specific overrides
+								<strong>CloudWatch Alarming Automation:</strong> Designed and extended a Terraform-based alarming solution delivering minimum-recommended and custom CloudWatch alarms across customer accounts — a reusable, governance-aligned foundation at scale
 							</li>
 							<li>
-								<strong>Sensitive Data Detection:</strong> Implemented
-								automated pattern matching for CloudWatch logs using
-								regex taxonomy classification
+								<strong>Sensitive Data Identification:</strong> Applied AWS Macie for S3 bucket scanning and engineered a complementary CloudWatch log analysis tool using keyword pattern matching and taxonomy-based classification to cover log groups Macie did not reach
 							</li>
 							<li>
-								<strong>Team Enablement:</strong> Serve as AWS architecture
-								expert for 20-person engineering team, mentoring on
-								Well-Architected principles
+								<strong>Cross-Account Drift Analysis:</strong> Built configuration comparison across dev → tst → stg → prd account sets, surfacing production resources with no lower-environment coverage — exposing untested infrastructure, compliance gaps, and deployment risk
+							</li>
+							<li>
+								<strong>Team Enablement:</strong> Served as AWS architecture expert for a 20-person engineering team, mentoring on Well-Architected principles
 							</li>
 						</ul>
 					</div>

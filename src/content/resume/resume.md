@@ -14,23 +14,20 @@ summary: "Senior Site Reliability Engineer with deep expertise in building scala
 ## Experience
 
 ### Sr. Site Reliability Engineer - Centene
-**Remote | Aug 2024 - Present**
+**Remote | Aug 2024 - Aug 2026**
 
-Lead Cloud Enablement efforts to improve AWS governance, compliance, and observability for Engineering teams managing 40+ AWS accounts, as part of a broader onboarding initiative spanning 800+ accounts organization-wide. Partner with engineering teams and stakeholders to build scalable automation tools for onboarding, alarm standardization, and sensitive data detection. Architected a reusable Python/PostgreSQL-based platform that empowers teams to identify resource waste, security gaps, and operational drift.
+Led Cloud Enablement efforts to improve AWS governance, compliance, and observability for Engineering teams managing 40+ AWS accounts, as part of a broader onboarding initiative spanning 800+ accounts organization-wide. Partnered with engineering teams and stakeholders to build scalable automation tools for onboarding, alarm standardization, and sensitive data detection. Architected a reusable Python/PostgreSQL-based platform that empowered teams to identify resource waste, security gaps, and operational drift.
 
-- **Automate CloudWatch Alarming management**: Use and extend the Terraform Alarming solution to support minimum recommended and custom alarming across Customer accounts creating a reusable foundation that scales well across Customers
-- **AWS Resource Technical Debt Application**: Initiated and led the prototyping of a Python-based solution for analyzing AWS resource utilization, compliance and best practices across multiple team AWS environment accounts, enabling proactive detection and analysis of cross-environment cost, governance and security best practices aligning with Centene Corporate goals and objectives
-- **Sensitive Data Identification**: Designed and implemented automated sensitive data detection in CloudWatch logs, leveraging keyword pattern matching and taxonomy-based classification; currently enhancing detection capabilities through iterative refinements
-- **Collaboration**: Collaborated closely with internal team members and external stakeholders to identify, define, and communicate key value propositions in cost optimization, security enhancement, and governance compliance, ensuring the AWS Resource Technical Debt Tool delivered relevant and actionable insights aligned with organizational objectives
-- **Design and build POC Automated Cloudwatch monitoring and alarming application**: Design bash application to manage AWS account alarming at scale
-- **Migrate automated Alarm PoC to Production with support**: Work with fellow team members to migrate PoC application to Terraform application supporting standard and custom alarming solutions for Customers to use to manage their AWS CloudWatch alarming needs
-- **Runbooks & Playbooks**: Create runbooks and playbooks as needed
+- **Automated CloudWatch Alarming Management**: Designed, implemented, and extended an in-house Terraform-based alarming solution delivering minimum-recommended and custom CloudWatch alarms across Customer accounts — establishing a reusable, governance-aligned alerting foundation at scale
+- **Sensitive Data Identification (S3 and CloudWatch)**: Applied AWS Macie for S3 bucket sensitive data scanning; engineered a complementary CloudWatch log analysis tool using keyword pattern matching and taxonomy-based classification to extend detection to log groups — a surface Macie did not cover at the time
+- **Cross-Account Environment Drift Analysis**: Built configuration comparison capability across environment-progression account sets (dev → tst → stg → prd), identifying resources and configurations present in production without corresponding coverage in lower environments — surfacing untested infrastructure, compliance gaps, and deployment risks for teams
 
 ### Sr. Site Reliability Engineer - Centene (Contractor via Zeektek)
 **Remote | Dec 2023 - Aug 2024**
 
 Enabled consistent deployment of AWS Recommended and custom alarms to support reliable, actionable monitoring across environments. Standardized alerting made it easier for teams to detect issues early, reduce configuration drift, and maintain consistent cross team scalable monitoring practices.
 
+- **Account Intelligence Tool**: Designed and built a modular Python reconnaissance tool — aggregating Config, Trusted Advisor, Cost Explorer, Security Hub, Macie, IAM, and service-level APIs — to establish ground-truth account visibility before each team onboarding engagement; surfaced alarming candidates alongside governance findings (tag non-compliance, CloudWatch log encryption and retention gaps, cost anomalies, sensitive data exposure) that teams had been unaware of in (often inherited) accounts; extensible by design — each additional discovery capability was added incrementally as a new API module
 - **Hierarchical Alarm Customization**: Designed an intuitive, CSV-based hierarchical configuration supporting team, environment, resource-type, and resource-specific alarm overrides, enabling flexible and precise alarm management
 - **Modular Core Architecture**: Developed a modular solution separating the core alarming engine (managed centrally via GitLab) from customer-specific configurations (via forked repositories), promoting standardization and simplifying maintenance while enabling team-specific customization without disrupting shared tooling
 - **Automated CloudFormation Management**: Built automated deployment pipelines leveraging AWS CloudFormation to manage stack drift, deploy alarms automatically upon resource discovery, and systematically remove orphaned alarms
@@ -57,7 +54,7 @@ Led platform-wide observability and alerting initiatives for a growing pre-IPO H
 - **Enterprise Observability Platform**: Architected end-to-end observability platform integrating Splunk, CloudWatch, New Relic and Pingdom data streams, enabling cross-domain visibility and reducing Mean Time to Recognize and Repair
 - **Splunk Administration & Dashboard Consolidation**: Served as on-site Splunk admin, setting up, configuring, and maintaining the on-premises cluster, and consolidating operational data into single-pane dashboards for multiple teams, improving log reliability, indexing efficiency, and cross-team observability
 - **Log Aggregation Pipeline**: Implemented centralized log aggregation and analysis pipeline using AWS Firehose and Lambda, correlating events across services using transaction IDs and contextual metadata
-- **Post-Incident Analysis Support**: Supported Post-Incident reviews when sensitive data was exposed
+- **Security Incident Forensics**: Built Splunk-based forensic reports correlating AWS CloudTrail audit events with service-level API call and response logs into a unified, timestamped timeline, enabling precise reconstruction of authorized user activity during sensitive data exposure incidents; supported post-incident reviews when sensitive data was exposed
 - **Notification Architecture**: Designed notification architecture using SNS and Lambda to evaluate and route alerts based on configurable rule sets, enabling team-specific incident management alerting and reporting
 - **Synthetic Monitoring Framework & SLA Enforcement**: Developed a lightweight BDD-based framework for automated functional and performance checks in production, executing every 10 minutes to validate critical user journeys. Captured backend service metrics during each run, enabling early detection of latency or degradation before customer impact. Defined synthetic SLAs, budgets and integrated alerting to proactively flag anomalies in backend components
 - **SLI Definition & Reliability Reporting**: Defined internal Service Level Indicators (SLIs) for platform services using Splunk for analysis, dashboarding, and alarming, giving engineering teams a shared, data-driven view of reliability and early-warning signals
@@ -75,7 +72,7 @@ Designed and led operational intelligence initiatives for a healthcare SaaS plat
 - **Logging Optimization**: Established logging standards reducing ingestion costs and improving log signal-to-noise ratio while meeting Security, Engineering, and Support requirements
 - **SLI, SLO & SLA creation**: Defined Service Level Indicators, Objectives and Agreement tracking, reporting and alarming for compliance, internal engineering teams and external customer SLA reporting support
 - **Synthetic SLA Verification**: Built a Java/Selenium and Splunk-based synthetic monitoring solution to validate SLA compliance, trigger alerts for budget violations, and proactively detect issues beyond availability alone
-- **Cross-Stack Visibility**: Enabled forensic analysis by correlating cross-stack telemetry, supporting engineering and SecOps investigations
+- **Security Incident Forensics Visibility**: Applied Splunk-based forensic correlation of AWS CloudTrail audit events and service-level API logs to reconstruct authorized user activity timelines across multiple sensitive data exposure incidents, supporting SecOps and compliance investigations
 
 ### Sr. QA Engineer - Nordstrom Financial
 **Denver, CO | Nov 2015 - Apr 2016**
@@ -145,7 +142,7 @@ Demand Planning & Pre-Sales Automation: Led the development of global business a
 
 ## Skills
 
-**Cloud Platforms**: AWS (SDK, IAM, Config, Identity Center, Cost Explorer, API Gateway, SNS, SQS, EventBridge, Firehose, EKS, EC2, Lambda, RDS, EBS, ECS, VPC, VPCE, S3, CloudWatch, LB, Transit Gateway, Secrets Manager, SSM Parameter Store)
+**Cloud Platforms**: AWS (Trusted Advisor, Security Hub, Macie, CloudTrail, SDK, IAM, Config, Identity Center, Cost Explorer, API Gateway, SNS, SQS, EventBridge, Firehose, EKS, EC2, Lambda, RDS, EBS, ECS, VPC, VPCE, S3, CloudWatch, LB, Transit Gateway, Secrets Manager, SSM Parameter Store)
 
 **Infrastructure & Automation**: Terraform, CloudFormation, Git, CI/CD, GitHub Actions, Bash
 

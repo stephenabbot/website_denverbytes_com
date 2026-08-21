@@ -14,7 +14,7 @@ summary: "Senior Site Reliability Engineer with deep expertise in building scala
 ## Experience
 
 ### Sr. Site Reliability Engineer - Centene
-**Remote | Aug 2024 - Aug 2026**
+**Remote | Aug 2024 - Sep 2026**
 
 Led Cloud Enablement efforts to improve AWS governance, compliance, and observability for Engineering teams managing 40+ AWS accounts, as part of a broader onboarding initiative spanning 800+ accounts organization-wide. Partnered with engineering teams and stakeholders to build scalable automation tools for onboarding, alarm standardization, and sensitive data detection. Architected a reusable Python/PostgreSQL-based platform that empowered teams to identify resource waste, security gaps, and operational drift.
 

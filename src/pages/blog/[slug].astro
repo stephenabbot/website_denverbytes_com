@@ -167,6 +167,15 @@ const { Content } = await render(entry);
 		margin: 1.5rem 0;
 	}
 
+	/* Inline-code chrome must not leak into fenced blocks: the light --gray-800
+	   background lands on every line inside Shiki's dark <pre>, hiding the text. */
+	.content :global(pre code) {
+		background: transparent;
+		padding: 0;
+		border-radius: 0;
+		font-size: inherit;
+	}
+
 	.content :global(blockquote) {
 		border-left: 3px solid var(--accent-regular);
 		padding-left: 1rem;
